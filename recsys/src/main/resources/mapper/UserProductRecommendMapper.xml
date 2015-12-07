@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yaochufa.apijava.recsys.mapper.UserProductRecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.yaochufa.apijava.recsys.model.UserProductRecommend" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, product_ids
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_product_recommend
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_product_recommend
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yaochufa.apijava.recsys.model.UserProductRecommend" >
+    insert into user_product_recommend (user_id, product_ids)
+    values (#{userId,jdbcType=INTEGER}, #{productIds,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yaochufa.apijava.recsys.model.UserProductRecommend" >
+    insert into user_product_recommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="productIds != null" >
+        product_ids,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="productIds != null" >
+        #{productIds,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yaochufa.apijava.recsys.model.UserProductRecommend" >
+    update user_product_recommend
+    <set >
+      <if test="productIds != null" >
+        product_ids = #{productIds,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yaochufa.apijava.recsys.model.UserProductRecommend" >
+    update user_product_recommend
+    set product_ids = #{productIds,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+    
+  <insert id="batchInsert" useGeneratedKeys="false"
+		parameterType="java.util.List">
+		   insert into user_product_recommend (user_id, product_ids)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.userId,jdbcType=INTEGER}, #{item.productIds,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+</mapper>
