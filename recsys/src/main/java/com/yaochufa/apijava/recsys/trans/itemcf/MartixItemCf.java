@@ -1,6 +1,7 @@
 package com.yaochufa.apijava.recsys.trans.itemcf;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -9,16 +10,20 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.jblas.DoubleMatrix;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import scala.Tuple2;
 
+import com.yaochufa.apijava.recsys.etl.Pair;
 import com.yaochufa.apijava.recsys.model.ProductSimimlarity;
+import com.yaochufa.apijava.recsys.trans.RecommendCache;
 
 @Component
 public class MartixItemCf implements Serializable{
 	
-	
+	@Autowired
+	private RecommendCache recommendCache;
 	/**
 	 * 计算两个向量的余弦相似度
 	 * @param vec1
@@ -88,6 +93,39 @@ public class MartixItemCf implements Serializable{
 		}).collect();	
 	}
 	
+	public  void   itemcfLocal(List<Tuple2<Object, double[]>> list){
+		for(Tuple2<Object, double[]> tup:list){
+			computerSimilarity(tup,list);
+		}
+	}
+
+	private void computerSimilarity(Tuple2<Object, double[]> productFeature,
+			List<Tuple2<Object, double[]>> list) {
+		int productId=(int) productFeature._1();
+		LimitInsertSort<Pair<Integer,Double>> imitInsertSort=new LimitInsertSort<Pair<Integer,Double>>(10, new SimilarityComparator());		Integer pid=(Integer) productFeature._1();
+		for(Tuple2<Object, double[]> tp:list){
+			if(pid.equals((Integer)tp._1())){
+				continue;
+			}
+			double cos=consineSimilarity(new DoubleMatrix(productFeature._2()), new DoubleMatrix(tp._2()));
+			imitInsertSort.insert(new Pair<Integer,Double>((Integer)tp._1(),cos));
+		}
+		System.out.println("---------------------------");
+		System.out.println(productFeature._1());
+		imitInsertSort.printResult();
+		recommendCache.cacheItemRecommends(productId,imitInsertSort.getResult());
+	}
+	
+	
+	private class SimilarityComparator implements Comparator<Pair<Integer,Double>>{
+
+		@Override
+		public int compare(Pair<Integer, Double> o1, Pair<Integer, Double> o2) {
+			double diff=o1.getSecond()-o2.getSecond();
+			return diff>0?1:diff==0?0:-1;
+		}
+		
+	}
 	
 	/*foreachPartition(new VoidFunction<Iterator<Tuple2<Tuple2<Integer,Integer>,Tuple2<DoubleMatrix,DoubleMatrix>>>>() {
 		

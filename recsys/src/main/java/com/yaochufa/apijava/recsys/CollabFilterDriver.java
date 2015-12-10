@@ -39,12 +39,11 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //				      System.exit(1);
 //		}
 		SpringContextHelper.init();
-//		String directoryPath=GlobalVar.ORDER_PATH;
-//		try (CollabFilterDriver cfcDriver = new CollabFilterDriver()) {
-//			MatrixFactorizationModel model = cfcDriver.service(directoryPath);
-//			//itemcf 结果获取
-//			
-//		}
+		String directoryPath=GlobalVar.ORDER_PATH;
+		try (CollabFilterDriver cfcDriver = new CollabFilterDriver()) {
+			MatrixFactorizationModel model = cfcDriver.service(directoryPath);
+			
+		}
 	}
 
 	public CollabFilterDriver() {
@@ -58,7 +57,7 @@ public class CollabFilterDriver implements Closeable,Serializable{
 		ALSCollabFiterTransor.Builder builder=new ALSCollabFiterTransor.Builder();
 		ALSCollabFiterTransor transor=builder.build();
 		MatrixFactorizationModel model=transor.tranImplicit(ratings);
-		transor.save(model,this.jssc);
+//		transor.save(model,this.jssc);
 //		SQLContext sqlCtx=new SQLContext(this.jssc);
 //		Properties pros=new Properties();
 //		pros.setProperty("user", GlobalVar.jdbcUsername);
@@ -70,7 +69,8 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //				new StructField("created_at",DataTypes.DateType,true,Metadata.empty())
 //		});
 //		sqlCtx.createDataFrame(itemcf.itemcf(model), schema).write().mode(SaveMode.Append).jdbc(GlobalVar.jdbcUrl, "product_simimlarity", pros);
-		productSimimlarityMapper.batchInsert(itemcf.itemcf(model));
+//		productSimimlarityMapper.batchInsert(itemcf.itemcf(model));
+		itemcf.itemcfLocal(model.productFeatures().toJavaRDD().collect());
 		return model;
 	}
 	

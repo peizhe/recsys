@@ -65,7 +65,7 @@
 	<bean id="collabFilterTaskCronTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="collabFilterTaskJobDetail" />
-		<property name="cronExpression" value="0 48 16 * * ?" /><!-- 每天上午5点40 
+		<property name="cronExpression" value="0 56 14 * * ?" /><!-- 每天上午5点40 
 			0 40 5 * * ? -->
 	</bean>
 	<!-- 设置调度 -->
@@ -78,5 +78,6 @@
 		</property>
 	</bean>
      <!-- schedual  ed -->
+	
 	
 </beans>
