@@ -3,17 +3,16 @@ package com.yaochufa.apijava.recsys;
 
 import java.io.Closeable;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
+import com.yaochufa.apijava.lang.common.Pair;
 import com.yaochufa.apijava.recsys.etl.DataTransformer;
 import com.yaochufa.apijava.recsys.etl.PurchaseDataTransformer;
 import com.yaochufa.apijava.recsys.mapper.ProductSimimlarityMapper;
@@ -44,6 +43,7 @@ public class CollabFilterDriver implements Closeable,Serializable{
 			MatrixFactorizationModel model = cfcDriver.service(directoryPath);
 			
 		}
+	
 	}
 
 	public CollabFilterDriver() {

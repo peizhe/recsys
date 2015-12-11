@@ -12,6 +12,8 @@ import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.mllib.recommendation.Rating;
 import org.springframework.stereotype.Component;
 
+import com.yaochufa.apijava.lang.common.Pair;
+
 import scala.Tuple2;
 
 @Component

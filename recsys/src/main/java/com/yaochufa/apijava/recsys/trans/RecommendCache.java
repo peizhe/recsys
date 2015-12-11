@@ -16,7 +16,7 @@ import org.apache.spark.mllib.recommendation.Rating;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.yaochufa.apijava.recsys.etl.Pair;
+import com.yaochufa.apijava.lang.common.Pair;
 
 
 @Component

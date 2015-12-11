@@ -73,8 +73,7 @@
 	<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
 		<property name="connectionFactory" ref="jedisConnectionFactory" />
 	</bean>
-	<bean id="javaSerRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
-		scope="prototype">
+	<bean id="javaSerRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
 		<property name="connectionFactory" ref="jedisConnectionFactory" />
 		<property name="keySerializer">
 			<bean

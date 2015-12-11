@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import scala.Tuple2;
 
-import com.yaochufa.apijava.recsys.etl.Pair;
+import com.yaochufa.apijava.lang.common.Pair;
 import com.yaochufa.apijava.recsys.model.ProductSimimlarity;
 import com.yaochufa.apijava.recsys.trans.RecommendCache;
 
