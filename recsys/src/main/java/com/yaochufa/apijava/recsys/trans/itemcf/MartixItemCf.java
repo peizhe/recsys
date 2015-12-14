@@ -15,9 +15,10 @@ import org.springframework.stereotype.Component;
 
 import scala.Tuple2;
 
-import com.yaochufa.apijava.recsys.etl.Pair;
+import com.yaochufa.apijava.lang.common.Pair;
 import com.yaochufa.apijava.recsys.model.ProductSimimlarity;
 import com.yaochufa.apijava.recsys.trans.RecommendCache;
+import com.yaochufa.apijava.recsys.util.GlobalVar;
 
 @Component
 public class MartixItemCf implements Serializable{
@@ -102,13 +103,15 @@ public class MartixItemCf implements Serializable{
 	private void computerSimilarity(Tuple2<Object, double[]> productFeature,
 			List<Tuple2<Object, double[]>> list) {
 		int productId=(int) productFeature._1();
-		LimitInsertSort<Pair<Integer,Double>> imitInsertSort=new LimitInsertSort<Pair<Integer,Double>>(10, new SimilarityComparator());		Integer pid=(Integer) productFeature._1();
+		LimitInsertSort<Pair<Integer,Double>> imitInsertSort=new LimitInsertSort<Pair<Integer,Double>>(GlobalVar.ITEMCF_REC_PRODUCT_SIZE, new SimilarityComparator());		Integer pid=(Integer) productFeature._1();
 		for(Tuple2<Object, double[]> tp:list){
 			if(pid.equals((Integer)tp._1())){
 				continue;
 			}
 			double cos=consineSimilarity(new DoubleMatrix(productFeature._2()), new DoubleMatrix(tp._2()));
-			imitInsertSort.insert(new Pair<Integer,Double>((Integer)tp._1(),cos));
+			if(!Double.isNaN(cos)){
+				imitInsertSort.insert(new Pair<Integer,Double>((Integer)tp._1(),cos));
+			}
 		}
 		System.out.println("---------------------------");
 		System.out.println(productFeature._1());

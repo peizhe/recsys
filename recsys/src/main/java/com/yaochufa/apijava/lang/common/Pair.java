@@ -1,9 +1,14 @@
-package com.yaochufa.apijava.recsys.etl;
+package com.yaochufa.apijava.lang.common;
 
 import java.io.Serializable;
 
 public class Pair <K,V> implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private K first;
 	private V second;
 	

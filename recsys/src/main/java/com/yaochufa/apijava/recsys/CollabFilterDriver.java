@@ -3,16 +3,17 @@ package com.yaochufa.apijava.recsys;
 
 import java.io.Closeable;
 import java.io.Serializable;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import scala.Tuple2;
 
 import com.yaochufa.apijava.recsys.etl.DataTransformer;
 import com.yaochufa.apijava.recsys.etl.PurchaseDataTransformer;
@@ -44,6 +45,7 @@ public class CollabFilterDriver implements Closeable,Serializable{
 			MatrixFactorizationModel model = cfcDriver.service(directoryPath);
 			
 		}
+	
 	}
 
 	public CollabFilterDriver() {
@@ -56,7 +58,7 @@ public class CollabFilterDriver implements Closeable,Serializable{
 		JavaRDD<Rating> ratings=dataTransformer.transform(this.jssc, directoryPath);
 		ALSCollabFiterTransor.Builder builder=new ALSCollabFiterTransor.Builder();
 		ALSCollabFiterTransor transor=builder.build();
-		MatrixFactorizationModel model=transor.tranImplicit(ratings);
+		MatrixFactorizationModel model=transor.tran(ratings);
 //		transor.save(model,this.jssc);
 //		SQLContext sqlCtx=new SQLContext(this.jssc);
 //		Properties pros=new Properties();
@@ -70,6 +72,7 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //		});
 //		sqlCtx.createDataFrame(itemcf.itemcf(model), schema).write().mode(SaveMode.Append).jdbc(GlobalVar.jdbcUrl, "product_simimlarity", pros);
 //		productSimimlarityMapper.batchInsert(itemcf.itemcf(model));
+//		model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile("data/productFeatures");
 		itemcf.itemcfLocal(model.productFeatures().toJavaRDD().collect());
 		return model;
 	}
@@ -87,5 +90,10 @@ public class CollabFilterDriver implements Closeable,Serializable{
 	public void close() {
 		this.jssc.stop();
 	}
-
+	static class FeaturesToString implements Function<Tuple2<Object, double[]>, String> {
+	    
+	    public String call(Tuple2<Object, double[]> element) {
+	      return element._1() + "," + Arrays.toString(element._2());
+	    }
+	  }
 }

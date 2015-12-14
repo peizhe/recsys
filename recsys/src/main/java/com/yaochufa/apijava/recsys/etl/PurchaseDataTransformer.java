@@ -12,6 +12,8 @@ import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.mllib.recommendation.Rating;
 import org.springframework.stereotype.Component;
 
+import com.yaochufa.apijava.lang.common.Pair;
+
 import scala.Tuple2;
 
 @Component
@@ -28,7 +30,14 @@ public class PurchaseDataTransformer implements DataTransformer {
 			String directoryPath) {
 		JavaRDD<String> originData= jsc.textFile(directoryPath);
 		final long now =System.currentTimeMillis();
-		 JavaRDD<Rating>  ratings=originData.mapToPair(new PairFunction<String, Pair<Integer, Integer>, Double>() {
+		 JavaRDD<Rating>  ratings=originData.filter(new Function<String, Boolean>() {
+			
+			@Override
+			public Boolean call(String line) throws Exception {
+				String[] tok = COMMA.split(line);
+				return tok.length==3;
+			}
+		}).mapToPair(new PairFunction<String, Pair<Integer, Integer>, Double>() {
 
 			private final String FORMET="yyy-MM-dd HH:mm:ss";
 			
@@ -41,6 +50,7 @@ public class PurchaseDataTransformer implements DataTransformer {
 					Double v=implicitScore(tok[2].substring(1, tok[2].length()-1));
 					return new Tuple2<Pair<Integer,Integer>, Double>(k, v);
 				} catch (Exception e) {
+					System.out.println(tok[0]+","+tok[1]+","+tok[2]);
 					e.printStackTrace();
 					return new Tuple2<Pair<Integer,Integer>, Double>(new Pair<Integer, Integer>(0, 0), 0d);
 				}

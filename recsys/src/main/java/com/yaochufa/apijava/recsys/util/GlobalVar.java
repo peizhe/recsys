@@ -37,4 +37,7 @@ public class GlobalVar {
 			.getString("order.path");
 	public static final String SPARKCONF_MASTER =  properties
 			.getString("sparkConf.master");
+	public static final int ITEMCF_REC_PRODUCT_SIZE =  properties
+			.getInt("itemcf.rec_product_size");
+
 }
