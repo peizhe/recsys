@@ -21,11 +21,11 @@ public class ProductEvaluator
 	public static void main(String[] args) throws TasteException, IOException
 	{
 		// String file = "datafile/book/rating.csv";
-		SpringContextHelper.init();
-		MySQLJDBCDataModel dataModel = SpringContextHelper
-				.getBean("cfDataModel", MySQLJDBCDataModel.class);
-		// String file = "data/libimseti/ratings.dat";
-		// DataModel dataModel = RecommendFactory.buildDataModel(file);
+//		SpringContextHelper.init();
+//		MySQLJDBCDataModel dataModel = SpringContextHelper
+//				.getBean("cfDataModel", MySQLJDBCDataModel.class);
+		 String file = "data/order/taste_preferences.txt";
+		 DataModel dataModel = RecommendFactory.buildDataModel(file);
 		userEuclidean(dataModel);
 		// userLoglikelihood(dataModel);
 		// userEuclideanNoPref(dataModel);
@@ -48,7 +48,7 @@ public class ProductEvaluator
 
 		RecommendFactory.evaluate(
 				RecommendFactory.EVALUATOR.AVERAGE_ABSOLUTE_DIFFERENCE,
-				recommenderBuilder, null, dataModel, 0.9);
+				recommenderBuilder, null, dataModel, 0.4);
 		RecommendFactory.statsEvaluator(recommenderBuilder, null, dataModel, 2);
 		return recommenderBuilder;
 	}
