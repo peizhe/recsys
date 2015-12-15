@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yaochufa.apijava.recsys.mapper.ProductSimimlarityMapper" >
+  <resultMap id="BaseResultMap" type="com.yaochufa.apijava.recsys.model.ProductSimimlarity" >
+    <result column="product_id_a" property="productIdA" jdbcType="INTEGER" />
+    <result column="product_id_b" property="productIdB" jdbcType="INTEGER" />
+    <result column="similarity" property="similarity" jdbcType="REAL" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yaochufa.apijava.recsys.model.ProductSimimlarity" >
+    insert into product_simimlarity (product_id_a, product_id_b, similarity, 
+      created_at)
+    values (#{productIdA,jdbcType=INTEGER}, #{productIdB,jdbcType=INTEGER}, #{similarity,jdbcType=REAL}, 
+      #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yaochufa.apijava.recsys.model.ProductSimimlarity" >
+    insert into product_simimlarity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productIdA != null" >
+        product_id_a,
+      </if>
+      <if test="productIdB != null" >
+        product_id_b,
+      </if>
+      <if test="similarity != null" >
+        similarity,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productIdA != null" >
+        #{productIdA,jdbcType=INTEGER},
+      </if>
+      <if test="productIdB != null" >
+        #{productIdB,jdbcType=INTEGER},
+      </if>
+      <if test="similarity != null" >
+        #{similarity,jdbcType=REAL},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="batchInsert" useGeneratedKeys="false"
+		parameterType="java.util.List">
+		
+		insert into product_simimlarity (product_id_a, product_id_b, similarity, 
+      created_at)
+    values 
+		  
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.productIdA,jdbcType=INTEGER}, #{item.productIdB,jdbcType=INTEGER}, #{item.similarity,jdbcType=REAL}, 
+      #{item.createdAt,jdbcType=TIMESTAMP})
+		</foreach>
+	</insert>
+</mapper>

@@ -20,18 +20,18 @@ public class ProductEvaluator
 
 	public static void main(String[] args) throws TasteException, IOException
 	{
-		// String file = "datafile/book/rating.csv";
+//		 String file = "datafile/book/rating.csv";
 //		SpringContextHelper.init();
 //		MySQLJDBCDataModel dataModel = SpringContextHelper
 //				.getBean("cfDataModel", MySQLJDBCDataModel.class);
-		 String file = "data/order/taste_preferences.txt";
+		 String file = "data/csv/order/taste_preferences.txt";
 		 DataModel dataModel = RecommendFactory.buildDataModel(file);
-		userEuclidean(dataModel);
+//		userEuclidean(dataModel);
 		// userLoglikelihood(dataModel);
 		// userEuclideanNoPref(dataModel);
-		// itemEuclidean(dataModel);
-		// itemLoglikelihood(dataModel);
-		// itemEuclideanNoPref(dataModel);
+		 itemEuclidean(dataModel);
+//		 itemLoglikelihood(dataModel);
+//		 itemEuclideanNoPref(dataModel);
 	}
 
 	public static RecommenderBuilder userEuclidean(DataModel dataModel)

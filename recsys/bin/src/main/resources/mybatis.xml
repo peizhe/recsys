@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 指定映射文件 -->
+	<mappers>
+		<!--  产品相似性 -->
+		<mapper resource="mapper/ProductSimimlarityMapper.xml"/>
+		<!-- 用户推荐列表 -->
+		<mapper resource="mapper/UserProductRecommendMapper.xml"/>
+		<!-- 评分表 -->
+		<mapper resource="mapper/RatingsMapper.xml"/>
+		<!-- 产品表 -->
+		<mapper resource="mapper/SearchMapper.xml"/>
+		
+	</mappers>
+</configuration>  
