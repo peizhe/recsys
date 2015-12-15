@@ -1,7 +1,10 @@
 package com.yaochufa.apijava.recsys;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.mahout.cf.taste.common.TasteException;
+
+import com.yaochufa.apijava.recsys.service.RecModelService;
+import com.yaochufa.apijava.recsys.service.RecModelServiceImpl;
+import com.yaochufa.apijava.recsys.util.SpringContextHelper;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -35,15 +38,4 @@ public class AppTest extends TestCase {
 		assertTrue(true);
 	}
 
-	public static void main(String[] args) {
-//		List a=new ArrayList();
-//		a.add(2);
-//		a.add(0, 1);
-//		for(Object s:a){
-//			System.out.println(s);
-//		}
-		Integer a=129;
-		Integer b=129;
-		System.out.println(a==b);
-	}
 }

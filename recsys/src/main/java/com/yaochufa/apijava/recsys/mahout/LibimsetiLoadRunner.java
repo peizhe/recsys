@@ -1,4 +1,4 @@
-package mia.recommender.ch05;
+package com.yaochufa.apijava.recsys.mahout;
 
 import org.apache.mahout.cf.taste.impl.eval.LoadEvaluator;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;

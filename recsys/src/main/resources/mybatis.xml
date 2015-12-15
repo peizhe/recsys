@@ -10,6 +10,8 @@
 		<mapper resource="mapper/UserProductRecommendMapper.xml"/>
 		<!-- 评分表 -->
 		<mapper resource="mapper/RatingsMapper.xml"/>
+		<!-- 产品表 -->
+		<mapper resource="mapper/SearchMapper.xml"/>
 		
 	</mappers>
 </configuration>  

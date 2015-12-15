@@ -39,5 +39,11 @@ public class GlobalVar {
 			.getString("sparkConf.master");
 	public static final int ITEMCF_REC_PRODUCT_SIZE =  properties
 			.getInt("itemcf.rec_product_size");
+	//酒景 缓存
+	public static final String PRODUCT_HASH_KEY =  properties
+			.getString("product.hash.key");
+	//距离范围
+	public static final int NEARBY_SIZE =  properties
+			.getInt("nearBy.size");
 
 }
