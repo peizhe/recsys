@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+  <resultMap id="BaseResultMap" type="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="Product" property="product" jdbcType="VARCHAR" />
+    <result column="Category" property="category" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="PCMainTitle" property="pcmaintitle" jdbcType="VARCHAR" />
+    <result column="PCSubTitle" property="pcsubtitle" jdbcType="VARCHAR" />
+    <result column="AppMainTitle" property="appmaintitle" jdbcType="VARCHAR" />
+    <result column="AppSubTitle" property="appsubtitle" jdbcType="VARCHAR" />
+    <result column="Tags" property="tags" jdbcType="VARCHAR" />
+    <result column="Properties" property="properties" jdbcType="VARCHAR" />
+    <result column="ScenicSpots" property="scenicspots" jdbcType="VARCHAR" />
+    <result column="Themes" property="themes" jdbcType="VARCHAR" />
+    <result column="fiter_themes" property="fiterThemes" jdbcType="VARCHAR" />
+    <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="GeoHash" property="geohash" jdbcType="VARCHAR" />
+    <result column="Region" property="region" jdbcType="VARCHAR" />
+    <result column="Province" property="province" jdbcType="VARCHAR" />
+    <result column="ProvinceAlias" property="provincealias" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="CityAlias" property="cityalias" jdbcType="VARCHAR" />
+    <result column="District" property="district" jdbcType="VARCHAR" />
+    <result column="Price" property="price" jdbcType="REAL" />
+    <result column="RetailPrice" property="retailprice" jdbcType="REAL" />
+    <result column="PCImageUrl" property="pcimageurl" jdbcType="VARCHAR" />
+    <result column="AppImageUrl" property="appimageurl" jdbcType="VARCHAR" />
+    <result column="ChannelLinkId" property="channellinkid" jdbcType="INTEGER" />
+    <result column="SalesVolume" property="salesvolume" jdbcType="INTEGER" />
+    <result column="Grade" property="grade" jdbcType="REAL" />
+    <result column="Rank" property="rank" jdbcType="REAL" />
+    <result column="CreatedDate" property="createddate" jdbcType="TIMESTAMP" />
+    <result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+    <result column="CommentCount" property="commentcount" jdbcType="INTEGER" />
+    <result column="is_reduce" property="isReduce" jdbcType="BIT" />
+    <result column="is_orderd" property="isOrderd" jdbcType="BIT" />
+    <result column="couponed_ios" property="couponedIos" jdbcType="BIT" />
+    <result column="couponed_android" property="couponedAndroid" jdbcType="BIT" />
+    <result column="product_city_alias" property="productCityAlias" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yaochufa.apijava.recsys.mapper.SearchMapper" extends="BaseResultMap" >
+    <result column="Description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+    <resultMap id="itemVoResultMap" type="com.yaochufa.apijava.lang.common.bean.ItemVo" >
+    <id column="Id" property="productId" jdbcType="INTEGER" />
+    <result column="Product" property="productName" jdbcType="VARCHAR" />
+   <!--  <result column="PCSubTitle" property="productTitleContent" jdbcType="VARCHAR" /> -->
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="PCMainTitle" property="mainTitle" jdbcType="VARCHAR" />
+    <result column="PCSubTitle" property="subTitle" jdbcType="VARCHAR" />
+    <result column="AppMainTitle" property="appMainTitle" jdbcType="VARCHAR" />
+    <result column="AppSubTitle" property="appSubTitle" jdbcType="VARCHAR" />
+    <result column="Tags" property="tags" jdbcType="VARCHAR" />
+    <result column="ScenicSpots" property="scenics" jdbcType="VARCHAR" />
+    <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="ProvinceAlias" property="province" jdbcType="VARCHAR" />
+    <result column="CityAlias" property="city" jdbcType="VARCHAR" />
+    <result column="Price" property="price" jdbcType="REAL" />
+    <result column="RetailPrice" property="retailPrice" jdbcType="REAL" />
+    <result column="PCImageUrl" property="homeImageUrl" jdbcType="VARCHAR" />
+    <result column="AppImageUrl" property="appImageUrl" jdbcType="VARCHAR" />
+    <result column="ChannelLinkId" property="channelLinkId" jdbcType="INTEGER" />
+    <result column="SalesVolume" property="saledCount" jdbcType="INTEGER" />
+    <result column="Grade" property="goodRate" jdbcType="REAL" />
+    <result column="Rank" property="sortRank" jdbcType="REAL" />
+    <result column="CommentCount" property="commentcount" jdbcType="INTEGER" />
+    <result column="product_city_alias" property="productCityAlias" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    Id, Product, Category, category_name, Address, PCMainTitle, PCSubTitle, AppMainTitle, 
+    AppSubTitle, Tags, Properties, ScenicSpots, Themes, fiter_themes, Longitude, Latitude, 
+    GeoHash, Region, Province, ProvinceAlias, City, CityAlias, District, Price, RetailPrice, 
+    PCImageUrl, AppImageUrl, ChannelLinkId, SalesVolume, Grade, Rank, CreatedDate, sync_time, 
+    CommentCount, is_reduce, is_orderd, couponed_ios, couponed_android, product_city_alias
+  </sql>
+  <sql id="Blob_Column_List" >
+    Description
+  </sql>
+  
+  
+    <sql id="itemVo_List" >
+    Id, Product, Category, category_name, Address, PCMainTitle, PCSubTitle, AppMainTitle, 
+    AppSubTitle, Tags, Properties, ScenicSpots, Themes, fiter_themes, Longitude, Latitude, 
+    GeoHash, Region, Province, ProvinceAlias, City, CityAlias, District, Price, RetailPrice, 
+    PCImageUrl, AppImageUrl, ChannelLinkId, SalesVolume, Grade, Rank, CreatedDate, sync_time, 
+    CommentCount, is_reduce, is_orderd, couponed_ios, couponed_android, product_city_alias
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from search
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from search
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+    insert into search (Id, Product, Category, 
+      category_name, Address, PCMainTitle, 
+      PCSubTitle, AppMainTitle, AppSubTitle, 
+      Tags, Properties, ScenicSpots, 
+      Themes, fiter_themes, Longitude, 
+      Latitude, GeoHash, Region, 
+      Province, ProvinceAlias, City, 
+      CityAlias, District, Price, 
+      RetailPrice, PCImageUrl, AppImageUrl, 
+      ChannelLinkId, SalesVolume, Grade, 
+      Rank, CreatedDate, sync_time, 
+      CommentCount, is_reduce, is_orderd, 
+      couponed_ios, couponed_android, product_city_alias, 
+      Description)
+    values (#{id,jdbcType=INTEGER}, #{product,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER}, 
+      #{categoryName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{pcmaintitle,jdbcType=VARCHAR}, 
+      #{pcsubtitle,jdbcType=VARCHAR}, #{appmaintitle,jdbcType=VARCHAR}, #{appsubtitle,jdbcType=VARCHAR}, 
+      #{tags,jdbcType=VARCHAR}, #{properties,jdbcType=VARCHAR}, #{scenicspots,jdbcType=VARCHAR}, 
+      #{themes,jdbcType=VARCHAR}, #{fiterThemes,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{geohash,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{provincealias,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{cityalias,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, 
+      #{retailprice,jdbcType=REAL}, #{pcimageurl,jdbcType=VARCHAR}, #{appimageurl,jdbcType=VARCHAR}, 
+      #{channellinkid,jdbcType=INTEGER}, #{salesvolume,jdbcType=INTEGER}, #{grade,jdbcType=REAL}, 
+      #{rank,jdbcType=REAL}, #{createddate,jdbcType=TIMESTAMP}, #{syncTime,jdbcType=TIMESTAMP}, 
+      #{commentcount,jdbcType=INTEGER}, #{isReduce,jdbcType=BIT}, #{isOrderd,jdbcType=BIT}, 
+      #{couponedIos,jdbcType=BIT}, #{couponedAndroid,jdbcType=BIT}, #{productCityAlias,jdbcType=VARCHAR}, 
+      #{description,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+    insert into search
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="product != null" >
+        Product,
+      </if>
+      <if test="category != null" >
+        Category,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="address != null" >
+        Address,
+      </if>
+      <if test="pcmaintitle != null" >
+        PCMainTitle,
+      </if>
+      <if test="pcsubtitle != null" >
+        PCSubTitle,
+      </if>
+      <if test="appmaintitle != null" >
+        AppMainTitle,
+      </if>
+      <if test="appsubtitle != null" >
+        AppSubTitle,
+      </if>
+      <if test="tags != null" >
+        Tags,
+      </if>
+      <if test="properties != null" >
+        Properties,
+      </if>
+      <if test="scenicspots != null" >
+        ScenicSpots,
+      </if>
+      <if test="themes != null" >
+        Themes,
+      </if>
+      <if test="fiterThemes != null" >
+        fiter_themes,
+      </if>
+      <if test="longitude != null" >
+        Longitude,
+      </if>
+      <if test="latitude != null" >
+        Latitude,
+      </if>
+      <if test="geohash != null" >
+        GeoHash,
+      </if>
+      <if test="region != null" >
+        Region,
+      </if>
+      <if test="province != null" >
+        Province,
+      </if>
+      <if test="provincealias != null" >
+        ProvinceAlias,
+      </if>
+      <if test="city != null" >
+        City,
+      </if>
+      <if test="cityalias != null" >
+        CityAlias,
+      </if>
+      <if test="district != null" >
+        District,
+      </if>
+      <if test="price != null" >
+        Price,
+      </if>
+      <if test="retailprice != null" >
+        RetailPrice,
+      </if>
+      <if test="pcimageurl != null" >
+        PCImageUrl,
+      </if>
+      <if test="appimageurl != null" >
+        AppImageUrl,
+      </if>
+      <if test="channellinkid != null" >
+        ChannelLinkId,
+      </if>
+      <if test="salesvolume != null" >
+        SalesVolume,
+      </if>
+      <if test="grade != null" >
+        Grade,
+      </if>
+      <if test="rank != null" >
+        Rank,
+      </if>
+      <if test="createddate != null" >
+        CreatedDate,
+      </if>
+      <if test="syncTime != null" >
+        sync_time,
+      </if>
+      <if test="commentcount != null" >
+        CommentCount,
+      </if>
+      <if test="isReduce != null" >
+        is_reduce,
+      </if>
+      <if test="isOrderd != null" >
+        is_orderd,
+      </if>
+      <if test="couponedIos != null" >
+        couponed_ios,
+      </if>
+      <if test="couponedAndroid != null" >
+        couponed_android,
+      </if>
+      <if test="productCityAlias != null" >
+        product_city_alias,
+      </if>
+      <if test="description != null" >
+        Description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="product != null" >
+        #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null" >
+        #{category,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="pcmaintitle != null" >
+        #{pcmaintitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pcsubtitle != null" >
+        #{pcsubtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="appmaintitle != null" >
+        #{appmaintitle,jdbcType=VARCHAR},
+      </if>
+      <if test="appsubtitle != null" >
+        #{appsubtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="properties != null" >
+        #{properties,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicspots != null" >
+        #{scenicspots,jdbcType=VARCHAR},
+      </if>
+      <if test="themes != null" >
+        #{themes,jdbcType=VARCHAR},
+      </if>
+      <if test="fiterThemes != null" >
+        #{fiterThemes,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="geohash != null" >
+        #{geohash,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null" >
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="provincealias != null" >
+        #{provincealias,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityalias != null" >
+        #{cityalias,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="retailprice != null" >
+        #{retailprice,jdbcType=REAL},
+      </if>
+      <if test="pcimageurl != null" >
+        #{pcimageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="appimageurl != null" >
+        #{appimageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="channellinkid != null" >
+        #{channellinkid,jdbcType=INTEGER},
+      </if>
+      <if test="salesvolume != null" >
+        #{salesvolume,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=REAL},
+      </if>
+      <if test="rank != null" >
+        #{rank,jdbcType=REAL},
+      </if>
+      <if test="createddate != null" >
+        #{createddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncTime != null" >
+        #{syncTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentcount != null" >
+        #{commentcount,jdbcType=INTEGER},
+      </if>
+      <if test="isReduce != null" >
+        #{isReduce,jdbcType=BIT},
+      </if>
+      <if test="isOrderd != null" >
+        #{isOrderd,jdbcType=BIT},
+      </if>
+      <if test="couponedIos != null" >
+        #{couponedIos,jdbcType=BIT},
+      </if>
+      <if test="couponedAndroid != null" >
+        #{couponedAndroid,jdbcType=BIT},
+      </if>
+      <if test="productCityAlias != null" >
+        #{productCityAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+    update search
+    <set >
+      <if test="product != null" >
+        Product = #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null" >
+        Category = #{category,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        Address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="pcmaintitle != null" >
+        PCMainTitle = #{pcmaintitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pcsubtitle != null" >
+        PCSubTitle = #{pcsubtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="appmaintitle != null" >
+        AppMainTitle = #{appmaintitle,jdbcType=VARCHAR},
+      </if>
+      <if test="appsubtitle != null" >
+        AppSubTitle = #{appsubtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null" >
+        Tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="properties != null" >
+        Properties = #{properties,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicspots != null" >
+        ScenicSpots = #{scenicspots,jdbcType=VARCHAR},
+      </if>
+      <if test="themes != null" >
+        Themes = #{themes,jdbcType=VARCHAR},
+      </if>
+      <if test="fiterThemes != null" >
+        fiter_themes = #{fiterThemes,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        Longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        Latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="geohash != null" >
+        GeoHash = #{geohash,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null" >
+        Region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        Province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="provincealias != null" >
+        ProvinceAlias = #{provincealias,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        City = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityalias != null" >
+        CityAlias = #{cityalias,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        District = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        Price = #{price,jdbcType=REAL},
+      </if>
+      <if test="retailprice != null" >
+        RetailPrice = #{retailprice,jdbcType=REAL},
+      </if>
+      <if test="pcimageurl != null" >
+        PCImageUrl = #{pcimageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="appimageurl != null" >
+        AppImageUrl = #{appimageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="channellinkid != null" >
+        ChannelLinkId = #{channellinkid,jdbcType=INTEGER},
+      </if>
+      <if test="salesvolume != null" >
+        SalesVolume = #{salesvolume,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null" >
+        Grade = #{grade,jdbcType=REAL},
+      </if>
+      <if test="rank != null" >
+        Rank = #{rank,jdbcType=REAL},
+      </if>
+      <if test="createddate != null" >
+        CreatedDate = #{createddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncTime != null" >
+        sync_time = #{syncTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commentcount != null" >
+        CommentCount = #{commentcount,jdbcType=INTEGER},
+      </if>
+      <if test="isReduce != null" >
+        is_reduce = #{isReduce,jdbcType=BIT},
+      </if>
+      <if test="isOrderd != null" >
+        is_orderd = #{isOrderd,jdbcType=BIT},
+      </if>
+      <if test="couponedIos != null" >
+        couponed_ios = #{couponedIos,jdbcType=BIT},
+      </if>
+      <if test="couponedAndroid != null" >
+        couponed_android = #{couponedAndroid,jdbcType=BIT},
+      </if>
+      <if test="productCityAlias != null" >
+        product_city_alias = #{productCityAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        Description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+    update search
+    set Product = #{product,jdbcType=VARCHAR},
+      Category = #{category,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      PCMainTitle = #{pcmaintitle,jdbcType=VARCHAR},
+      PCSubTitle = #{pcsubtitle,jdbcType=VARCHAR},
+      AppMainTitle = #{appmaintitle,jdbcType=VARCHAR},
+      AppSubTitle = #{appsubtitle,jdbcType=VARCHAR},
+      Tags = #{tags,jdbcType=VARCHAR},
+      Properties = #{properties,jdbcType=VARCHAR},
+      ScenicSpots = #{scenicspots,jdbcType=VARCHAR},
+      Themes = #{themes,jdbcType=VARCHAR},
+      fiter_themes = #{fiterThemes,jdbcType=VARCHAR},
+      Longitude = #{longitude,jdbcType=VARCHAR},
+      Latitude = #{latitude,jdbcType=VARCHAR},
+      GeoHash = #{geohash,jdbcType=VARCHAR},
+      Region = #{region,jdbcType=VARCHAR},
+      Province = #{province,jdbcType=VARCHAR},
+      ProvinceAlias = #{provincealias,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      CityAlias = #{cityalias,jdbcType=VARCHAR},
+      District = #{district,jdbcType=VARCHAR},
+      Price = #{price,jdbcType=REAL},
+      RetailPrice = #{retailprice,jdbcType=REAL},
+      PCImageUrl = #{pcimageurl,jdbcType=VARCHAR},
+      AppImageUrl = #{appimageurl,jdbcType=VARCHAR},
+      ChannelLinkId = #{channellinkid,jdbcType=INTEGER},
+      SalesVolume = #{salesvolume,jdbcType=INTEGER},
+      Grade = #{grade,jdbcType=REAL},
+      Rank = #{rank,jdbcType=REAL},
+      CreatedDate = #{createddate,jdbcType=TIMESTAMP},
+      sync_time = #{syncTime,jdbcType=TIMESTAMP},
+      CommentCount = #{commentcount,jdbcType=INTEGER},
+      is_reduce = #{isReduce,jdbcType=BIT},
+      is_orderd = #{isOrderd,jdbcType=BIT},
+      couponed_ios = #{couponedIos,jdbcType=BIT},
+      couponed_android = #{couponedAndroid,jdbcType=BIT},
+      product_city_alias = #{productCityAlias,jdbcType=VARCHAR},
+      Description = #{description,jdbcType=LONGVARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+    update search
+    set Product = #{product,jdbcType=VARCHAR},
+      Category = #{category,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      PCMainTitle = #{pcmaintitle,jdbcType=VARCHAR},
+      PCSubTitle = #{pcsubtitle,jdbcType=VARCHAR},
+      AppMainTitle = #{appmaintitle,jdbcType=VARCHAR},
+      AppSubTitle = #{appsubtitle,jdbcType=VARCHAR},
+      Tags = #{tags,jdbcType=VARCHAR},
+      Properties = #{properties,jdbcType=VARCHAR},
+      ScenicSpots = #{scenicspots,jdbcType=VARCHAR},
+      Themes = #{themes,jdbcType=VARCHAR},
+      fiter_themes = #{fiterThemes,jdbcType=VARCHAR},
+      Longitude = #{longitude,jdbcType=VARCHAR},
+      Latitude = #{latitude,jdbcType=VARCHAR},
+      GeoHash = #{geohash,jdbcType=VARCHAR},
+      Region = #{region,jdbcType=VARCHAR},
+      Province = #{province,jdbcType=VARCHAR},
+      ProvinceAlias = #{provincealias,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      CityAlias = #{cityalias,jdbcType=VARCHAR},
+      District = #{district,jdbcType=VARCHAR},
+      Price = #{price,jdbcType=REAL},
+      RetailPrice = #{retailprice,jdbcType=REAL},
+      PCImageUrl = #{pcimageurl,jdbcType=VARCHAR},
+      AppImageUrl = #{appimageurl,jdbcType=VARCHAR},
+      ChannelLinkId = #{channellinkid,jdbcType=INTEGER},
+      SalesVolume = #{salesvolume,jdbcType=INTEGER},
+      Grade = #{grade,jdbcType=REAL},
+      Rank = #{rank,jdbcType=REAL},
+      CreatedDate = #{createddate,jdbcType=TIMESTAMP},
+      sync_time = #{syncTime,jdbcType=TIMESTAMP},
+      CommentCount = #{commentcount,jdbcType=INTEGER},
+      is_reduce = #{isReduce,jdbcType=BIT},
+      is_orderd = #{isOrderd,jdbcType=BIT},
+      couponed_ios = #{couponedIos,jdbcType=BIT},
+      couponed_android = #{couponedAndroid,jdbcType=BIT},
+      product_city_alias = #{productCityAlias,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+   <select id="selectByLinkid" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from search
+    where ChannelLinkId = #{channellinkid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectStatByPro" resultType="java.util.HashMap" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper">
+  	SELECT 
+  		Id,ProvinceAlias,CityAlias,Product,category_name,Address,PCMainTitle,PCSubTitle,AppMainTitle,AppSubTitle,Tags,Properties,
+  		ScenicSpots,Themes,Region,Price,RetailPrice,PCImageUrl,AppImageUrl,ChannelLinkId,SalesVolume,Grade,Rank,CommentCount 
+  	FROM 
+  		search 
+  	WHERE ProvinceAlias = #{provincealias,jdbcType=VARCHAR} 
+  	GROUP BY ProvinceAlias,CityAlias,Product 
+  	ORDER BY CONVERT(ProvinceAlias USING gbk) COLLATE gbk_chinese_ci,CONVERT(CityAlias USING gbk) COLLATE gbk_chinese_ci
+  </select>
+  <select id="selectStatByCity" resultType="java.util.HashMap" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper">
+  	SELECT 
+  		Id,ProvinceAlias,CityAlias,Product,category_name,Address,PCMainTitle,PCSubTitle,AppMainTitle,AppSubTitle,Tags,Properties,
+  		ScenicSpots,Themes,Region,Price,RetailPrice,PCImageUrl,AppImageUrl,ChannelLinkId,SalesVolume,Grade,Rank,CommentCount 
+  	FROM 
+  		search 
+  	WHERE CityAlias = #{cityalias,jdbcType=VARCHAR} 
+  	GROUP BY ProvinceAlias,CityAlias,Product 
+  	ORDER BY CONVERT(ProvinceAlias USING gbk) COLLATE gbk_chinese_ci,CONVERT(CityAlias USING gbk) COLLATE gbk_chinese_ci
+  </select>
+  <select id="selectProductNumByPro" resultType="java.lang.Integer" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper">
+  	SELECT 
+  		COUNT(Product) productNum 
+  	FROM search 
+  	WHERE ProvinceAlias = #{provincealias,jdbcType=VARCHAR} 
+  </select>
+  <select id="selectProductNumByCity" resultType="java.lang.Integer" parameterType="com.yaochufa.apijava.recsys.mapper.SearchMapper">
+  	SELECT 
+  		COUNT(Product) productNum 
+  	FROM search 
+  	WHERE CityAlias = #{cityalias,jdbcType=VARCHAR} 
+  </select>
+  <!-- 根据 id列表  火炬酒景-->  
+  <select id="selectByIds" resultMap="itemVoResultMap" >
+  	 select 
+    <include refid="itemVo_List" />
+    from search
+    where Id in  
+ <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+  #{item.first}
+ </foreach>  
+  </select>
+    <select id="selectByRecommendedItems" resultMap="itemVoResultMap" >
+  	 select 
+    <include refid="itemVo_List" />
+    from search
+    where Id in  
+ <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+  #{item.itemID}
+ </foreach>  
+  </select>
+</mapper>
