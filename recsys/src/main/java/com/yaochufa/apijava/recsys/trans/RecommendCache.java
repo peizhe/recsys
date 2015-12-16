@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.yaochufa.apijava.lang.common.Pair;
+import com.yaochufa.apijava.recsys.mapper.SearchMapper;
 
 
 @Component
@@ -27,6 +28,7 @@ public class RecommendCache {
 	private String COLLAB_FILTER_USER_CACHE="recsys:collab_filter_user";
 	private String COLLAB_FILTER_ITEM_CACHE="recsys:collab_filter_item:";
 	private int recNum=30;
+	private SearchMapper searchMapper;
 	
 	public void cacheUserRecommends(final MatrixFactorizationModel model,JavaRDD<Integer> users,final Set<String> filterSet){
 		users.foreachPartition(new VoidFunction<Iterator<Integer>>() {
@@ -56,7 +58,9 @@ public class RecommendCache {
 	public void cacheItemRecommends(int productId,
 			List<Pair<Integer, Double>> result) {
 		for(Pair<Integer, Double> pair:result){
-			redisTemplate.opsForHash().put(COLLAB_FILTER_ITEM_CACHE+productId,pair.getFirst(), pair.getSecond());
+			//这里 如ugo 产品不存在 过滤
+			redisTemplate.opsForHash().put(COLLAB_FILTER_ITEM_CACHE+productId,pair.getFirst().toString(), pair.getSecond());
+			
 		}
 //		redisTemplate.opsForValue().set(COLLAB_FILTER_ITEM_CACHE+productId, result);
 		redisTemplate.expire(COLLAB_FILTER_ITEM_CACHE+productId, 3, TimeUnit.DAYS);

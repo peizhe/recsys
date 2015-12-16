@@ -44,6 +44,11 @@
 			value="com.yaochufa.apijava.recsys.mapper.UserProductRecommendMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	<bean id="searchMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.yaochufa.apijava.recsys.mapper.SearchMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
      <!-- mapper 代理 ed -->
      
      <!-- schedual  st -->
