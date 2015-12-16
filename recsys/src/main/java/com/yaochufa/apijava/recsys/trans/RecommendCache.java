@@ -55,7 +55,10 @@ public class RecommendCache {
 
 	public void cacheItemRecommends(int productId,
 			List<Pair<Integer, Double>> result) {
-		redisTemplate.opsForValue().set(COLLAB_FILTER_ITEM_CACHE+productId, result);
+		for(Pair<Integer, Double> pair:result){
+			redisTemplate.opsForHash().put(COLLAB_FILTER_ITEM_CACHE+productId,pair.getFirst(), pair.getSecond());
+		}
+//		redisTemplate.opsForValue().set(COLLAB_FILTER_ITEM_CACHE+productId, result);
 		redisTemplate.expire(COLLAB_FILTER_ITEM_CACHE+productId, 3, TimeUnit.DAYS);
 	}
 	
