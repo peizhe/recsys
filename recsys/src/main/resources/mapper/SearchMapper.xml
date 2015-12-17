@@ -596,7 +596,7 @@
   	FROM search 
   	WHERE CityAlias = #{cityalias,jdbcType=VARCHAR} 
   </select>
-  <select id="exists" parameterType="java.lang.Integer" result>
-  select 1 from search where Id=#{id}
+  <select id="exists" parameterType="java.lang.Integer" resultType="java.lang.Boolean">
+  select count(1) from search where Id=#{id}
   </select>
 </mapper>
