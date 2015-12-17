@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yaochufa.middle.mapper.search.SearchMapper" >
-  <resultMap id="BaseResultMap" type="com.yaochufa.middle.model.search.Search" >
+<mapper namespace="com.yaochufa.apijava.recsys.mapper.SearchMapper" >
+  <resultMap id="BaseResultMap" type="com.yaochufa.apijava.recsys.model.Search" >
     <id column="Id" property="id" jdbcType="INTEGER" />
     <result column="Product" property="product" jdbcType="VARCHAR" />
     <result column="Category" property="category" jdbcType="INTEGER" />
@@ -42,7 +42,7 @@
     <result column="couponed_android" property="couponedAndroid" jdbcType="BIT" />
     <result column="product_city_alias" property="productCityAlias" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.yaochufa.middle.model.search.Search" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.yaochufa.apijava.recsys.model.Search" extends="BaseResultMap" >
     <result column="Description" property="description" jdbcType="LONGVARCHAR" />
   </resultMap>
   
@@ -70,7 +70,7 @@
     delete from search
     where Id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.yaochufa.middle.model.search.Search" >
+  <insert id="insert" parameterType="com.yaochufa.apijava.recsys.model.Search" >
     insert into search (Id, Product, Category, 
       category_name, Address, PCMainTitle, 
       PCSubTitle, AppMainTitle, AppSubTitle, 
@@ -100,7 +100,7 @@
       #{couponedIos,jdbcType=BIT}, #{couponedAndroid,jdbcType=BIT}, #{productCityAlias,jdbcType=VARCHAR}, 
       #{description,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yaochufa.middle.model.search.Search" >
+  <insert id="insertSelective" parameterType="com.yaochufa.apijava.recsys.model.Search" >
     insert into search
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -347,7 +347,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yaochufa.middle.model.search.Search" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.yaochufa.apijava.recsys.model.Search" >
     update search
     <set >
       <if test="product != null" >
@@ -470,7 +470,7 @@
     </set>
     where Id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yaochufa.middle.model.search.Search" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yaochufa.apijava.recsys.model.Search" >
     update search
     set Product = #{product,jdbcType=VARCHAR},
       Category = #{category,jdbcType=INTEGER},
@@ -513,7 +513,7 @@
       Description = #{description,jdbcType=LONGVARCHAR}
     where Id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yaochufa.middle.model.search.Search" >
+  <update id="updateByPrimaryKey" parameterType="com.yaochufa.apijava.recsys.model.Search" >
     update search
     set Product = #{product,jdbcType=VARCHAR},
       Category = #{category,jdbcType=INTEGER},
@@ -564,7 +564,7 @@
     where ChannelLinkId = #{channellinkid,jdbcType=INTEGER}
   </select>
   
-  <select id="selectStatByPro" resultType="java.util.HashMap" parameterType="com.yaochufa.middle.model.search.Search">
+  <select id="selectStatByPro" resultType="java.util.HashMap" parameterType="com.yaochufa.apijava.recsys.model.Search">
   	SELECT 
   		Id,ProvinceAlias,CityAlias,Product,category_name,Address,PCMainTitle,PCSubTitle,AppMainTitle,AppSubTitle,Tags,Properties,
   		ScenicSpots,Themes,Region,Price,RetailPrice,PCImageUrl,AppImageUrl,ChannelLinkId,SalesVolume,Grade,Rank,CommentCount 
@@ -574,7 +574,7 @@
   	GROUP BY ProvinceAlias,CityAlias,Product 
   	ORDER BY CONVERT(ProvinceAlias USING gbk) COLLATE gbk_chinese_ci,CONVERT(CityAlias USING gbk) COLLATE gbk_chinese_ci
   </select>
-  <select id="selectStatByCity" resultType="java.util.HashMap" parameterType="com.yaochufa.middle.model.search.Search">
+  <select id="selectStatByCity" resultType="java.util.HashMap" parameterType="com.yaochufa.apijava.recsys.model.Search">
   	SELECT 
   		Id,ProvinceAlias,CityAlias,Product,category_name,Address,PCMainTitle,PCSubTitle,AppMainTitle,AppSubTitle,Tags,Properties,
   		ScenicSpots,Themes,Region,Price,RetailPrice,PCImageUrl,AppImageUrl,ChannelLinkId,SalesVolume,Grade,Rank,CommentCount 
@@ -584,19 +584,19 @@
   	GROUP BY ProvinceAlias,CityAlias,Product 
   	ORDER BY CONVERT(ProvinceAlias USING gbk) COLLATE gbk_chinese_ci,CONVERT(CityAlias USING gbk) COLLATE gbk_chinese_ci
   </select>
-  <select id="selectProductNumByPro" resultType="java.lang.Integer" parameterType="com.yaochufa.middle.model.search.Search">
+  <select id="selectProductNumByPro" resultType="java.lang.Integer" parameterType="com.yaochufa.apijava.recsys.model.Search">
   	SELECT 
   		COUNT(Product) productNum 
   	FROM search 
   	WHERE ProvinceAlias = #{provincealias,jdbcType=VARCHAR} 
   </select>
-  <select id="selectProductNumByCity" resultType="java.lang.Integer" parameterType="com.yaochufa.middle.model.search.Search">
+  <select id="selectProductNumByCity" resultType="java.lang.Integer" parameterType="com.yaochufa.apijava.recsys.model.Search">
   	SELECT 
   		COUNT(Product) productNum 
   	FROM search 
   	WHERE CityAlias = #{cityalias,jdbcType=VARCHAR} 
   </select>
-  <select id="exists" parameterType="java.lang.Integer" resultType="java.lang.Boolean">
+  <select id="exists" parameterType="int" resultType="boolean">
   select count(1) from search where Id=#{id}
   </select>
 </mapper>

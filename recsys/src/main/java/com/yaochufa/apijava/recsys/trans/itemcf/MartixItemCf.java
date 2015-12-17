@@ -27,6 +27,7 @@ public class MartixItemCf implements Serializable {
 	@Autowired
 	private RecommendCache recommendCache;
 
+	@Autowired
 	private SearchMapper searchMapper;
 
 	/**
