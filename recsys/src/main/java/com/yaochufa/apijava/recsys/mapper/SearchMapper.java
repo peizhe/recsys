@@ -38,4 +38,6 @@ public interface SearchMapper {
 
 	boolean exists(int productId);
 
+	List<Integer> selectAllWithIdList();
+
 }

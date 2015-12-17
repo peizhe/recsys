@@ -1,18 +1,21 @@
-package com.yaochufa.apijava.recsys.trans;
+package com.yaochufa.apijava.recsys.collabfilter.tran;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.annotation.Resource;
+
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.recommendation.ALS;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import scala.Tuple2;
 
@@ -20,7 +23,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yaochufa.apijava.recsys.mapper.UserProductRecommendMapper;
 import com.yaochufa.apijava.recsys.model.UserProductRecommend;
-import com.yaochufa.apijava.recsys.util.GlobalVar;
 import com.yaochufa.apijava.recsys.util.SpringContextHelper;
 
 public class ALSCollabFiterTransor implements CollabFiterTransor{
@@ -36,8 +38,9 @@ public class ALSCollabFiterTransor implements CollabFiterTransor{
 	private  double alpha ;
 	
 //	private UserProductRecommendDao dao=new UserProductRecommendDao();
-	@Autowired
 	private UserProductRecommendMapper userProductRecommendMapper=SpringContextHelper.getBean("userProductRecommendMapper", UserProductRecommendMapper.class);
+	@Resource(name="javaSerRedisTemplate")
+	private RedisTemplate<String, Object> redisTemplate;
 	
 	public ALSCollabFiterTransor(int rank, int iterations, double lambda,
 			int blocks, double alpha) {
@@ -59,64 +62,6 @@ public class ALSCollabFiterTransor implements CollabFiterTransor{
 		return ALS.trainImplicit(ratings.rdd(), rank, iterations, lambda,blocks,alpha);
 	}
 
-	@Override
-	public void save(MatrixFactorizationModel model,JavaSparkContext jssc) {
-		
-//		String outputDir="data";
-//		Rating[] res=model.recommendProducts(17720, 2);
-//		String p="";
-//		for(Rating r:res){
-//			p+=r.product()+",";
-//		}
-//		System.out.println("17720:"+p);
-//		model.userFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile(
-//		        outputDir + "/userFeatures");
-//		    model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile(
-//		        outputDir + "/productFeatures");
-//		    System.out.println("Final user/product features written to " + outputDir);
-		JavaRDD<String> users=jssc.textFile(GlobalVar.USER_PATH);
-		List<String> userList=users.collect();
-		int e=10000;
-		int i=0;
-		int len=userList.size();
-		List<String> temp=null;
-		do{
-			int endIx=i+e;
-			if(endIx<=len){
-				temp=userList.subList(i, endIx);
-			}else{
-				temp=userList.subList(i, len);
-			}
-			List<UserProductRecommend> list=new ArrayList<UserProductRecommend>();
-			for(String _uid:temp){
-				if(StringUtils.isNotBlank(_uid)){
-					int uid=Integer.parseInt(_uid);
-					Rating[] rating=null;
-					try {
-						rating=model.recommendProducts(uid, 50);
-					} catch (Exception e2) {
-						System.out.println(uid);
-						continue;
-					}
-				
-					UserProductRecommend re=resToEntitys(rating,uid);
-					if(re!=null){
-						list.add(re);
-					}
-				}
-			}
-			userProductRecommendMapper.batchInsert(list);
-			i+=e;
-		}while(i<len);
-		
-	
-		
-		
-		
-		
-	
-		
-	}
 
 	
 	private UserProductRecommend resToEntitys(Rating[] rating,int uid) {

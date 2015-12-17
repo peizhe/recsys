@@ -158,6 +158,12 @@
 			<artifactId>jedis</artifactId>
 			<version>2.6.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-client</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<testResources>

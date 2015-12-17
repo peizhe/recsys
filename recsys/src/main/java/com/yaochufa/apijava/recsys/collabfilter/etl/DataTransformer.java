@@ -1,4 +1,4 @@
-package com.yaochufa.apijava.recsys.etl;
+package com.yaochufa.apijava.recsys.collabfilter.etl;
 
 import java.io.Serializable;
 
