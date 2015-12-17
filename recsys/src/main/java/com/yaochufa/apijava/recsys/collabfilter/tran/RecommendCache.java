@@ -1,4 +1,4 @@
-package com.yaochufa.apijava.recsys.trans;
+package com.yaochufa.apijava.recsys.collabfilter.tran;
 
 import java.util.HashMap;
 import java.util.Iterator;

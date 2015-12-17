@@ -599,4 +599,7 @@
   <select id="exists" parameterType="int" resultType="boolean">
   select count(1) from search where Id=#{id}
   </select>
+  <select id="selectAllWithIdList" resultType="java.lang.Integer">
+  select id from search
+  </select>
 </mapper>

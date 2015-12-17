@@ -1,4 +1,4 @@
-package com.yaochufa.apijava.recsys.trans;
+package com.yaochufa.apijava.recsys.collabfilter.tran;
 
 import java.io.Serializable;
 
@@ -12,5 +12,4 @@ public interface CollabFiterTransor extends Serializable{
 	
 	MatrixFactorizationModel tranImplicit(JavaRDD<Rating> ratings);
 
-	void save(MatrixFactorizationModel model,JavaSparkContext jssc);
 }

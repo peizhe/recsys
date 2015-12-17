@@ -1,10 +1,11 @@
-package com.yaochufa.apijava.recsys;
+package com.yaochufa.apijava.recsys.collabfilter;
 
 
 import java.io.Closeable;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -15,22 +16,22 @@ import org.apache.spark.mllib.recommendation.Rating;
 
 import scala.Tuple2;
 
-import com.yaochufa.apijava.recsys.etl.DataTransformer;
-import com.yaochufa.apijava.recsys.etl.PurchaseDataTransformer;
+import com.yaochufa.apijava.recsys.collabfilter.etl.DataTransformer;
+import com.yaochufa.apijava.recsys.collabfilter.etl.PurchaseDataTransformer;
+import com.yaochufa.apijava.recsys.collabfilter.tran.ALSCollabFiterTransor;
 import com.yaochufa.apijava.recsys.mapper.ProductSimimlarityMapper;
-import com.yaochufa.apijava.recsys.trans.ALSCollabFiterTransor;
-import com.yaochufa.apijava.recsys.trans.itemcf.MartixItemCf;
 import com.yaochufa.apijava.recsys.util.GlobalVar;
 import com.yaochufa.apijava.recsys.util.SpringContextHelper;
 
 
 public class CollabFilterDriver implements Closeable,Serializable{
 
-	MartixItemCf itemcf=SpringContextHelper.getBean("martixItemCf", MartixItemCf.class);
+	ResultHadler resultHadler=SpringContextHelper.getBean("resultHadler", ResultHadler.class);
 	ProductSimimlarityMapper productSimimlarityMapper=SpringContextHelper.getBean("productSimimlarityMapper", ProductSimimlarityMapper.class);
 	
 	private JavaSparkContext jssc;
 	private DataTransformer dataTransformer=SpringContextHelper.getBean("purchaseDataTransformer", PurchaseDataTransformer.class);
+	private Set<Integer> validProducts;
 	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 //		final String directoryPath = args[0];
@@ -42,8 +43,8 @@ public class CollabFilterDriver implements Closeable,Serializable{
 		SpringContextHelper.init();
 		String directoryPath=GlobalVar.ORDER_PATH;
 		try (CollabFilterDriver cfcDriver = new CollabFilterDriver()) {
-			MatrixFactorizationModel model = cfcDriver.service(directoryPath);
-			
+			cfcDriver.service(directoryPath);
+			System.out.println("完成全部");
 		}
 	
 	}
@@ -54,12 +55,11 @@ public class CollabFilterDriver implements Closeable,Serializable{
 		this.jssc = new JavaSparkContext(conf);
 	}
 
-	public MatrixFactorizationModel service(String directoryPath){
+	public void service(String directoryPath){
 		JavaRDD<Rating> ratings=dataTransformer.transform(this.jssc, directoryPath);
 		ALSCollabFiterTransor.Builder builder=new ALSCollabFiterTransor.Builder();
 		ALSCollabFiterTransor transor=builder.build();
 		MatrixFactorizationModel model=transor.tran(ratings);
-//		transor.save(model,this.jssc);
 //		SQLContext sqlCtx=new SQLContext(this.jssc);
 //		Properties pros=new Properties();
 //		pros.setProperty("user", GlobalVar.jdbcUsername);
@@ -73,8 +73,9 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //		sqlCtx.createDataFrame(itemcf.itemcf(model), schema).write().mode(SaveMode.Append).jdbc(GlobalVar.jdbcUrl, "product_simimlarity", pros);
 //		productSimimlarityMapper.batchInsert(itemcf.itemcf(model));
 //		model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile("data/productFeatures");
-		itemcf.itemcfLocal(model.productFeatures().toJavaRDD().collect());
-		return model;
+//		resultHadler.itemcfLocal(model.productFeatures().toJavaRDD().collect());
+		List<Integer> userList=null;
+//		resultHadler.userCf(model,userList);
 	}
 	
 	<T> void printResult(List<T> list){

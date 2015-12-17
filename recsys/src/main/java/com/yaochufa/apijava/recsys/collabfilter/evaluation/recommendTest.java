@@ -1,4 +1,4 @@
-package com.yaochufa.apijava.recsys.evaluation;
+package com.yaochufa.apijava.recsys.collabfilter.evaluation;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import org.apache.spark.mllib.recommendation.Rating;
 
 import scala.Tuple2;
 
-import com.yaochufa.apijava.recsys.etl.DataTransformer;
-import com.yaochufa.apijava.recsys.etl.PurchaseDataTransformer;
-import com.yaochufa.apijava.recsys.trans.ALSCollabFiterTransor;
+import com.yaochufa.apijava.recsys.collabfilter.etl.DataTransformer;
+import com.yaochufa.apijava.recsys.collabfilter.etl.PurchaseDataTransformer;
+import com.yaochufa.apijava.recsys.collabfilter.tran.ALSCollabFiterTransor;
 
 public class recommendTest {
 

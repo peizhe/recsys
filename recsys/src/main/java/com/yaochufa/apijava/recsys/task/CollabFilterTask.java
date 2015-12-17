@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.yaochufa.apijava.recsys.CollabFilterDriver;
+import com.yaochufa.apijava.recsys.collabfilter.CollabFilterDriver;
 import com.yaochufa.apijava.recsys.util.GlobalVar;
 
 @Component

@@ -1,4 +1,4 @@
-package com.yaochufa.apijava.recsys.trans.itemcf;
+package com.yaochufa.apijava.recsys.collabfilter;
 
 import java.util.ArrayList;
 import java.util.Comparator;

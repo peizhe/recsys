@@ -1,16 +1,26 @@
-package com.yaochufa.apijava.recsys.trans.itemcf;
+package com.yaochufa.apijava.recsys.collabfilter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
+import org.apache.spark.mllib.recommendation.Rating;
 import org.jblas.DoubleMatrix;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import scala.Tuple2;
@@ -18,18 +28,90 @@ import scala.Tuple2;
 import com.yaochufa.apijava.lang.common.Pair;
 import com.yaochufa.apijava.recsys.mapper.SearchMapper;
 import com.yaochufa.apijava.recsys.model.ProductSimimlarity;
-import com.yaochufa.apijava.recsys.trans.RecommendCache;
-import com.yaochufa.apijava.recsys.util.GlobalVar;
+import com.yaochufa.apijava.recsys.model.UserProductRecommend;
 
 @Component
-public class MartixItemCf implements Serializable {
+public class ResultHadler implements Serializable {
 
-	@Autowired
-	private RecommendCache recommendCache;
-
-	@Autowired
+	
 	private SearchMapper searchMapper;
+	
+	@Resource(name="javaSerRedisTemplate")
+	private RedisTemplate<String, Object> redisTemplate;
+	private String COLLAB_FILTER_USER_CACHE="recsys:collab_filter_user";
+	private String COLLAB_FILTER_ITEM_CACHE="recsys:collab_filter_item:";
+	private Set<Integer> validProduct;
+	
+	@Autowired
+	public ResultHadler(SearchMapper searchMapper) {
+		super();
+		this.searchMapper = searchMapper;
+		List<Integer> ids=this.searchMapper.selectAllWithIdList();
+		validProduct=new HashSet<Integer>(ids);
+	}
 
+	public void userCf(MatrixFactorizationModel model,List<Integer> userList) {
+//		String outputDir="data";
+//		Rating[] res=model.recommendProducts(17720, 2);
+//		String p="";
+//		for(Rating r:res){
+//			p+=r.product()+",";
+//		}
+//		System.out.println("17720:"+p);
+//		model.userFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile(
+//		        outputDir + "/userFeatures");
+//		    model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile(
+//		        outputDir + "/productFeatures");
+//		    System.out.println("Final user/product features written to " + outputDir);
+//		JavaRDD<String> users=jssc.textFile(GlobalVar.USER_PATH);
+//		List<String> userList=users.collect();
+		int e=10000;
+		int i=0;
+		int len=userList.size();
+		
+		List<Integer> temp=null;
+		do{
+			int endIx=i+e;
+			if(endIx<=len){
+				temp=userList.subList(i, endIx);
+			}else{
+				temp=userList.subList(i, len);
+			}
+			for(Integer uid:temp){
+
+				Rating[] rating=null;
+				try {
+					rating=model.recommendProducts(uid, 100);
+				} catch (Exception e2) {
+					System.out.println(uid);
+					Map<String,Double> map=new HashMap<String,Double>();
+					for(Rating r:rating){
+						map.put(Integer.toString(r.product()), r.rating());
+					}
+					redisTemplate.opsForHash().putAll(COLLAB_FILTER_ITEM_CACHE+uid,map);
+					redisTemplate.expire(COLLAB_FILTER_ITEM_CACHE+uid, 3, TimeUnit.DAYS);
+					continue;
+				}
+			
+//				UserProductRecommend re=resToEntitys(rating,uid);
+//				if(re!=null){
+//					list.add(re);
+//				}
+				if(rating!=null&&rating.length>0){
+					Map<String,Double> map=new HashMap<String,Double>();
+					for(Rating r:rating){
+						map.put(Integer.toString(r.product()), r.rating());
+					}
+					redisTemplate.opsForHash().putAll(COLLAB_FILTER_USER_CACHE+uid,map);
+					redisTemplate.expire(COLLAB_FILTER_USER_CACHE+uid, 3, TimeUnit.DAYS);
+				}	
+				
+			}
+			i+=e;
+		}while(i<len);
+		
+	}
+	
 	/**
 	 * 计算两个向量的余弦相似度
 	 * 
@@ -122,32 +204,35 @@ public class MartixItemCf implements Serializable {
 	private void computerSimilarity(Tuple2<Object, double[]> productFeature,
 			List<Tuple2<Object, double[]>> list) {
 		Integer pid = (Integer) productFeature._1();
-		if (!searchMapper.exists(pid)) {
+		if (!validProduct.contains(pid)) {
 			return;
 		}
-		LimitInsertSort<Pair<Integer, Double>> imitInsertSort = new LimitInsertSort<Pair<Integer, Double>>(
-				GlobalVar.ITEMCF_REC_PRODUCT_SIZE, new SimilarityComparator());
-	
+//		LimitInsertSort<Pair<Integer, Double>> imitInsertSort = new LimitInsertSort<Pair<Integer, Double>>(
+//				GlobalVar.ITEMCF_REC_PRODUCT_SIZE, new SimilarityComparator());
+//	
+		Map<String,Float> map=new HashMap<String,Float>();
 		for (Tuple2<Object, double[]> tp : list) {
-			int toPid = (Integer) tp._1();
+			Integer toPid = (Integer) tp._1();
 			if (pid.equals(toPid)) {
 				continue;
 			}
-			if (!searchMapper.exists(toPid)) {
+			if (!validProduct.contains(pid)) {
 				continue;
 			}
 			double cos = consineSimilarity(
 					new DoubleMatrix(productFeature._2()),
 					new DoubleMatrix(tp._2()));
 			if (!Double.isNaN(cos)) {
-				imitInsertSort.insert(new Pair<Integer, Double>(toPid, cos));
+//				imitInsertSort.insert(new Pair<Integer, Double>(toPid, cos));
+				map.put(toPid.toString(),Double.valueOf(cos).floatValue());
 			}
 		}
-		System.out.println("---------------------------");
-		System.out.println(productFeature._1());
-		imitInsertSort.printResult();
-		recommendCache.cacheItemRecommends(pid,
-				imitInsertSort.getResult());
+		redisTemplate.opsForHash().putAll(COLLAB_FILTER_ITEM_CACHE+pid,map);
+		redisTemplate.expire(COLLAB_FILTER_ITEM_CACHE+pid, 3, TimeUnit.DAYS);
+//		System.out.println(productFeature._1());
+//		imitInsertSort.printResult();
+//		recommendCache.cacheItemRecommends(pid,
+//				imitInsertSort.getResult());
 	}
 
 	private class SimilarityComparator implements
