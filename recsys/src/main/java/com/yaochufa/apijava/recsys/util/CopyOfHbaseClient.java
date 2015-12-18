@@ -1,7 +1,6 @@
 package com.yaochufa.apijava.recsys.util;
 
 import java.io.IOException;
-import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -18,9 +17,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.yaochufa.apijava.lang.common.Pair;
-
-public class HbaseClient {
+public class CopyOfHbaseClient {
     // 声明静态配置
     static Configuration conf = null;
     static {
@@ -122,18 +119,6 @@ public class HbaseClient {
         System.out.println("add data Success!");
     }
 
-    static class FamilyValues{
-    	private String familyName;
-    	private Set<Pair<String,Object>> columnValues;
-		public String getFamilyName() {
-			return familyName;
-		}
-		public void setFamilyName(String familyName) {
-			this.familyName = familyName;
-		}
-		
-		void add(String column,Object value){}
-    }
     
 
     /*
