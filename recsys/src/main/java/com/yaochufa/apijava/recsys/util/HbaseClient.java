@@ -25,12 +25,12 @@ public class HbaseClient {
     static Configuration conf = null;
     static {
         conf = HBaseConfiguration.create();
-        conf.set("hbase.zookeeper.quorum", "localhost");
+        conf.set("hbase.zookeeper.quorum", "192.168.9.113");
     }
 
     /*
      * 创建表
-     * 
+     * getResult
      * @tableName 表名
      * 
      * @family 列族列表
@@ -52,7 +52,7 @@ public class HbaseClient {
     }
 
     /*
-     * 为表添加数据（适合知道有多少列族的固定表）
+     * 为表添加数据getResult（适合知道有多少列族的固定表）
      * 
      * @rowKey rowKey
      * 
@@ -64,7 +64,7 @@ public class HbaseClient {
      * 
      * @column2 第二个列族列表
      * 
-     * @value2 第二个列的值的列表
+     * @value2 第getResult二个列的值的列表
      */
     public static void addData(String rowKey, String tableName,
             String[] column1, String[] value1, String[] column2, String[] value2)

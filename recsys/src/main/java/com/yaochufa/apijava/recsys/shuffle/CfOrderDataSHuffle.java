@@ -9,16 +9,20 @@ import java.util.regex.Pattern;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.HTableFactory;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
-import org.apache.hadoop.mapred.JobConf;
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.api.java.function.VoidFunction;
-import org.apache.spark.rdd.PairRDDFunctions;
 
 import scala.Tuple2;
+
+import com.yaochufa.apijava.recsys.util.GlobalVar;
 
 /**
  * 处理订单数据 便于准备 协同过滤 以及关联规则需要的数据
@@ -41,13 +45,9 @@ public class CfOrderDataSHuffle implements DataShuffle {
 
 	@Override
 	public void shuffle(JavaSparkContext jssc) {
-		String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		Configuration conf=new HBaseConfiguration().create();
-		conf.set("hbase.zookeeper.property.clientPort", "2181");
-		conf.set("hbase.zookeeper.quorum", "master");
-		JobConf jobConf=new JobConf(conf, this.getClass());
-//		jobConf.setOutputFormat(DBOutputFormat.class);
-//		jobConf.set(DBoutputFormat.,"user");
+		String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date())+".csv";
+//		jobConf.setOutputFormat(theClass);
+//		jobConf.set(DBoutputFormat,"user");JavaRDD<String> data=
 		jssc.textFile(inputPath + "/" + fileName)
 				.filter(new Function<String, Boolean>() {
 
@@ -56,7 +56,7 @@ public class CfOrderDataSHuffle implements DataShuffle {
 						String[] tok = COMMA.split(line);
 						return tok.length >= 4;
 					}
-				}).flatMapToPair(new OutputPairFlatMapFunction()).saveAsHadoopDataset(jobConf);
+				}).foreachPartition(new OutputFunction());
 	}
 
 	class OutputPairFlatMapFunction implements PairFlatMapFunction<String, ImmutableBytesWritable, Put>{
@@ -116,9 +116,14 @@ public class CfOrderDataSHuffle implements DataShuffle {
 		private long TWELVE_MONTH_DIFF = 12 * 30 * 24 * 3600000;
 		private long currTime = new Date().getTime();
 		private final int baseOrderScore = 30;
-
+		private final String TABLE_NAME="usert_product_score";
+		
 		@Override
 		public void call(Iterator<String> t) throws Exception {
+			Configuration conf=HBaseConfiguration.create();
+			conf.set("hbase.zookeeper.property.clientPort", "2181");
+			conf.set("hbase.zookeeper.quorum", "192.168.9.113");
+			HTable table=new HTable(conf, TABLE_NAME);
 			while (t.hasNext()) {
 				String arr[] = COMMA.split(t.next());
 				String userId = arr[1];
@@ -129,6 +134,9 @@ public class CfOrderDataSHuffle implements DataShuffle {
 				int isCancled = Integer.parseInt(arr[4]);
 				// score=stateBoost(score,isCancled);
 				for (String productId : productIds) {
+					Put p=new Put((userId+"_"+productId).getBytes());
+					p.addColumn("cf1".getBytes(),  "score".getBytes(),String.valueOf(score).getBytes() );
+					table.put(p);
 				}
 
 			}
@@ -152,5 +160,11 @@ public class CfOrderDataSHuffle implements DataShuffle {
 			return isCancled == 1 ? score * 0.5 : score;
 		}
 	}
-
+ 
+	public static void main(String[] args) {
+		SparkConf conf = new SparkConf().setAppName("Collaborative Filtering with Mysql").set("spark.master", GlobalVar.SPARKCONF_MASTER);
+		conf.set("spark.executor.memory", "1024M");
+		JavaSparkContext jssc = new JavaSparkContext(conf);
+		new CfOrderDataSHuffle("data/csv/order").shuffle(jssc);
+	}
 }
