@@ -1,11 +1,12 @@
 package com.yaochufa.apijava.recsys;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.Scan;
 
 /**
  * Unit test for simple App.
@@ -45,5 +46,8 @@ public class AppTest extends TestCase {
 		Integer a=129;
 		Integer b=129;
 		System.out.println(a==b);
+		Configuration conf=HBaseConfiguration.create();
+		Scan scan = new Scan();
+		scan.setCacheBlocks(conf.getBoolean("a", false));
 	}
 }

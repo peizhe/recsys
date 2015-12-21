@@ -9,10 +9,10 @@ import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HResult;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -89,15 +89,17 @@ public class CollabFilterDriver implements Closeable,Serializable{
 		conf.set("hbase.zookeeper.quorum", "192.168.9.113");
 		//设置查询的表名
 		conf.set(TableInputFormat.INPUT_TABLE, "user_product_score");
-		System.out.println(jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).count());
-		return jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).map(new Function<Tuple2<ImmutableBytesWritable,Result>, Result>() {
+		System.out.println(jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).values().count());
+		this.jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).values().map(new Function<Result, Integer>() {
 
 			@Override
-			public Result call(Tuple2<ImmutableBytesWritable, Result> v1)
-					throws Exception {
-				return v1._2();
+			public Integer call(Result v1) throws Exception {
+				// TODO Auto-generated method stub
+				return 1;
 			}
-		}).map(	new Function<Result, Rating>() {
+		});
+		
+		/*new Function<Result, Rating>() {
 
 			@Override
 			public Rating call(Result r)
@@ -107,8 +109,11 @@ public class CollabFilterDriver implements Closeable,Serializable{
 				double score =Double.parseDouble(new String(r.getValue("basic".getBytes(),"score".getBytes())));
 				return new Rating(Integer.parseInt(user_product[0]), Integer.parseInt(user_product[1]), score);
 			}
-		});
+		}*/
+		
+		return null;
 	}
+	
 
 	<T> void printResult(List<T> list){
 		for(T t:list){

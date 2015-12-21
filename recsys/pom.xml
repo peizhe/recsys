@@ -158,18 +158,18 @@
 			<artifactId>jedis</artifactId>
 			<version>2.6.2</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-client</artifactId>
-			<version>1.1.2</version>
-		</dependency> -->
 		<dependency>
-		  <groupId>org.apache.spark</groupId>
-		  <artifactId>spark-examples</artifactId>
-		  <version>1.5.2</version>
-		  <scope>provided</scope>
+		  <groupId>org.apache.hbase</groupId>
+		  <artifactId>hbase-client-ycf</artifactId>
+		  <version>1.1.2</version>
 		</dependency>
-	
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-server</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		
+		
 	</dependencies>
 	<build>
 		<testResources>
