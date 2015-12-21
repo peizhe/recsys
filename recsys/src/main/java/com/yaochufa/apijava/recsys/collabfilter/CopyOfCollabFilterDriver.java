@@ -7,12 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
-import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -30,7 +24,7 @@ import com.yaochufa.apijava.recsys.util.GlobalVar;
 import com.yaochufa.apijava.recsys.util.SpringContextHelper;
 
 
-public class CollabFilterDriver implements Closeable,Serializable{
+public class CopyOfCollabFilterDriver implements Closeable,Serializable{
 
 	ResultHadler resultHadler=SpringContextHelper.getBean("resultHadler", ResultHadler.class);
 	ProductSimimlarityMapper productSimimlarityMapper=SpringContextHelper.getBean("productSimimlarityMapper", ProductSimimlarityMapper.class);
@@ -47,21 +41,22 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //				      System.exit(1);
 //		}
 		SpringContextHelper.init();
-		try (CollabFilterDriver cfcDriver = new CollabFilterDriver()) {
-			cfcDriver.service();
+		String directoryPath=GlobalVar.ORDER_PATH;
+		try (CopyOfCollabFilterDriver cfcDriver = new CopyOfCollabFilterDriver()) {
+			cfcDriver.service(directoryPath);
 			System.out.println("完成全部");
 		}
 	
 	}
 
-	public CollabFilterDriver() {
+	public CopyOfCollabFilterDriver() {
 		SparkConf conf = new SparkConf().setAppName("Collaborative Filtering with Mysql").set("spark.master", GlobalVar.SPARKCONF_MASTER);
 		conf.set("spark.executor.memory", "1024M");
 		this.jssc = new JavaSparkContext(conf);
 	}
 
-	public void service(){
-		JavaRDD<Rating> ratings=loadFromHbase();
+	public void service(String directoryPath){
+		JavaRDD<Rating> ratings=dataTransformer.transform(this.jssc, directoryPath);
 		ALSCollabFiterTransor.Builder builder=new ALSCollabFiterTransor.Builder();
 		ALSCollabFiterTransor transor=builder.build();
 		MatrixFactorizationModel model=transor.tran(ratings);
@@ -83,33 +78,6 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //		resultHadler.userCf(model,userList);
 	}
 	
-	private JavaRDD<Rating> loadFromHbase() {
-		Configuration conf=HBaseConfiguration.create();
-		conf.set("hbase.zookeeper.property.clientPort", "2181");
-		conf.set("hbase.zookeeper.quorum", "192.168.9.113");
-		//设置查询的表名
-		conf.set(TableInputFormat.INPUT_TABLE, "user_product_score");
-		System.out.println(jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).count());
-		return jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).map(new Function<Tuple2<ImmutableBytesWritable,Result>, Result>() {
-
-			@Override
-			public Result call(Tuple2<ImmutableBytesWritable, Result> v1)
-					throws Exception {
-				return v1._2();
-			}
-		}).map(	new Function<Result, Rating>() {
-
-			@Override
-			public Rating call(Result r)
-					throws Exception {
-				String rowKey=new String(r.getRow());
-				String[] user_product=rowKey.split("_");
-				double score =Double.parseDouble(new String(r.getValue("basic".getBytes(),"score".getBytes())));
-				return new Rating(Integer.parseInt(user_product[0]), Integer.parseInt(user_product[1]), score);
-			}
-		});
-	}
-
 	<T> void printResult(List<T> list){
 		for(T t:list){
 			System.out.println(t.toString());

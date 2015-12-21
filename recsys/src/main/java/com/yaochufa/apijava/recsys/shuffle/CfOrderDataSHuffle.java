@@ -38,6 +38,7 @@ public class CfOrderDataSHuffle implements DataShuffle {
 
 	private static final Pattern COMMA = Pattern.compile(",");
 	private final Pattern JH = Pattern.compile("#");
+	private final String ORDER_PK_PRIFEX="O:";
 	private String inputPath;
 	private String freqPatternDataPath;
 	
@@ -154,18 +155,25 @@ public class CfOrderDataSHuffle implements DataShuffle {
 			HTable product_item_set=new HTable(conf, "product_item_set");
 			while (t.hasNext()) {
 				String arr[] = COMMA.split(t.next());
+				String orderId = arr[0];
 				String userId = arr[1];
 				String[] productIds = JH.split(arr[2]);
 				long timestamp = Long.parseLong(arr[3]);
 				double score = baseOrderScore;
 				score = timeBoost(score, timestamp);
 				int isCancled = Integer.parseInt(arr[4]);
-				// score=stateBoost(score,isCancled);
-//				Put post=new Put((userId+"_"+productId).getBytes());
+				score=stateBoost(score,isCancled);
+				StringBuilder sb=new StringBuilder();
 				for (String productId : productIds) {
 					Put p=new Put((userId+"_"+productId).getBytes());
 					p.addColumn("cf1".getBytes(),  "score".getBytes(),String.valueOf(score).getBytes() );
 					user_product_score.put(p);
+					sb.append(productId).append(" ");
+				}
+				if(sb.length()>0){
+					Put product_item=new Put((ORDER_PK_PRIFEX+orderId).getBytes());
+					product_item.addColumn("cf1".getBytes(), "items".getBytes(), sb.substring(0, sb.length()-1).getBytes());
+					product_item_set.put(product_item);
 				}
 
 			}

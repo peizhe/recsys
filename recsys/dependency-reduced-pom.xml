@@ -134,14 +134,6 @@
           <groupId>org.slf4j</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>log4j</artifactId>
-          <groupId>log4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-log4j12</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>compress-lzf</artifactId>
           <groupId>com.ning</groupId>
         </exclusion>
@@ -152,10 +144,6 @@
         <exclusion>
           <artifactId>RoaringBitmap</artifactId>
           <groupId>org.roaringbitmap</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-net</artifactId>
-          <groupId>commons-net</groupId>
         </exclusion>
         <exclusion>
           <artifactId>akka-remote_2.10</artifactId>
@@ -180,10 +168,6 @@
         <exclusion>
           <artifactId>mesos</artifactId>
           <groupId>org.apache.mesos</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>netty-all</artifactId>
-          <groupId>io.netty</groupId>
         </exclusion>
         <exclusion>
           <artifactId>stream</artifactId>
@@ -249,14 +233,6 @@
       <version>1.6</version>
       <scope>provided</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>commons-collections</artifactId>
-          <groupId>commons-collections</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang</artifactId>
-          <groupId>commons-lang</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>commons-digester</artifactId>
           <groupId>commons-digester</groupId>

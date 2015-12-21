@@ -14,9 +14,8 @@ public class CollabFilterTask {
 	
 	public  void run(){
 		LOGGER.info("基于用户购买行为协同过滤 task started！");
-		String directoryPath=GlobalVar.ORDER_PATH;
 		try (CollabFilterDriver cfcDriver = new CollabFilterDriver()) {
-			cfcDriver.service(directoryPath);
+			cfcDriver.service();
 			
 		}
 		LOGGER.info("基于用户购买行为协同过滤 task end！");
