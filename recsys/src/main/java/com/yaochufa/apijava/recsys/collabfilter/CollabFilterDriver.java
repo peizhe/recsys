@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.HResult;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
@@ -25,6 +24,8 @@ import scala.Tuple2;
 import com.yaochufa.apijava.recsys.collabfilter.etl.DataTransformer;
 import com.yaochufa.apijava.recsys.collabfilter.etl.PurchaseDataTransformer;
 import com.yaochufa.apijava.recsys.collabfilter.tran.ALSCollabFiterTransor;
+import com.yaochufa.apijava.recsys.function.collabfilter.ParseUserFunction;
+import com.yaochufa.apijava.recsys.function.collabfilter.UserProductScoreMapFun;
 import com.yaochufa.apijava.recsys.mapper.ProductSimimlarityMapper;
 import com.yaochufa.apijava.recsys.util.GlobalVar;
 import com.yaochufa.apijava.recsys.util.SpringContextHelper;
@@ -79,8 +80,8 @@ public class CollabFilterDriver implements Closeable,Serializable{
 //		productSimimlarityMapper.batchInsert(itemcf.itemcf(model));
 //		model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile("data/productFeatures");
 //		resultHadler.itemcfLocal(model.productFeatures().toJavaRDD().collect());
-		List<Integer> userList=null;
-//		resultHadler.userCf(model,userList);
+//		List<Integer> userList=	model.userFeatures().toJavaRDD().map(new ParseUserFunction());
+		resultHadler.userCf(model,model.userFeatures().toJavaRDD());
 	}
 	
 	private JavaRDD<Rating> loadFromHbase() {
@@ -89,29 +90,8 @@ public class CollabFilterDriver implements Closeable,Serializable{
 		conf.set("hbase.zookeeper.quorum", "192.168.9.113");
 		//设置查询的表名
 		conf.set(TableInputFormat.INPUT_TABLE, "user_product_score");
-		System.out.println(jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).values().count());
-		this.jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).values().map(new Function<Result, Integer>() {
-
-			@Override
-			public Integer call(Result v1) throws Exception {
-				// TODO Auto-generated method stub
-				return 1;
-			}
-		});
+		return this.jssc.newAPIHadoopRDD(conf, TableInputFormat.class, ImmutableBytesWritable.class, Result.class).values().map(new UserProductScoreMapFun());
 		
-		/*new Function<Result, Rating>() {
-
-			@Override
-			public Rating call(Result r)
-					throws Exception {
-				String rowKey=new String(r.getRow());
-				String[] user_product=rowKey.split("_");
-				double score =Double.parseDouble(new String(r.getValue("basic".getBytes(),"score".getBytes())));
-				return new Rating(Integer.parseInt(user_product[0]), Integer.parseInt(user_product[1]), score);
-			}
-		}*/
-		
-		return null;
 	}
 	
 

@@ -3,6 +3,7 @@ package com.yaochufa.apijava.recsys.collabfilter;
 
 import java.io.Closeable;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
 
@@ -58,6 +60,7 @@ public class CopyOfCollabFilterDriver implements Closeable,Serializable{
 	public void service(String directoryPath){
 		JavaRDD<Rating> ratings=dataTransformer.transform(this.jssc, directoryPath);
 		ALSCollabFiterTransor.Builder builder=new ALSCollabFiterTransor.Builder();
+//		builder.setIterations(15);
 		ALSCollabFiterTransor transor=builder.build();
 		MatrixFactorizationModel model=transor.tran(ratings);
 //		SQLContext sqlCtx=new SQLContext(this.jssc);
@@ -74,8 +77,12 @@ public class CopyOfCollabFilterDriver implements Closeable,Serializable{
 //		productSimimlarityMapper.batchInsert(itemcf.itemcf(model));
 //		model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile("data/productFeatures");
 //		resultHadler.itemcfLocal(model.productFeatures().toJavaRDD().collect());
-		List<Integer> userList=null;
-//		resultHadler.userCf(model,userList);
+		List<Tuple2<Object, double[]>> _userList=model.userFeatures().toJavaRDD().take(1000);
+		List<Integer> userList=new ArrayList<Integer>(_userList.size());
+		for(Tuple2<Object, double[]> t:_userList){
+			userList.add((Integer) t._1());
+		}
+		resultHadler.userCf(model,userList);
 	}
 	
 	<T> void printResult(List<T> list){

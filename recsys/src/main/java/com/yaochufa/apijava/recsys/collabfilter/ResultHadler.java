@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
 import org.jblas.DoubleMatrix;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Component;
 import scala.Tuple2;
 
 import com.yaochufa.apijava.lang.common.Pair;
+import com.yaochufa.apijava.recsys.function.collabfilter.ForEacheUserFunction;
 import com.yaochufa.apijava.recsys.mapper.SearchMapper;
 import com.yaochufa.apijava.recsys.model.ProductSimimlarity;
 import com.yaochufa.apijava.recsys.model.UserProductRecommend;
@@ -38,7 +41,7 @@ public class ResultHadler implements Serializable {
 	
 	@Resource(name="javaSerRedisTemplate")
 	private RedisTemplate<String, Object> redisTemplate;
-	private String COLLAB_FILTER_USER_CACHE="recsys:collab_filter_user";
+	private String COLLAB_FILTER_USER_CACHE="recsys:collab_filter_user:";
 	private String COLLAB_FILTER_ITEM_CACHE="recsys:collab_filter_item:";
 	private Set<Integer> validProduct;
 	
@@ -84,9 +87,9 @@ public class ResultHadler implements Serializable {
 					rating=model.recommendProducts(uid, 100);
 				} catch (Exception e2) {
 					System.out.println(uid);
-					Map<String,Double> map=new HashMap<String,Double>();
+					Map<String,Float> map=new HashMap<String,Float>();
 					for(Rating r:rating){
-						map.put(Integer.toString(r.product()), r.rating());
+						map.put(Integer.toString(r.product()), Double.valueOf(r.rating()).floatValue());
 					}
 					redisTemplate.opsForHash().putAll(COLLAB_FILTER_ITEM_CACHE+uid,map);
 					redisTemplate.expire(COLLAB_FILTER_ITEM_CACHE+uid, 3, TimeUnit.DAYS);
@@ -98,9 +101,9 @@ public class ResultHadler implements Serializable {
 //					list.add(re);
 //				}
 				if(rating!=null&&rating.length>0){
-					Map<String,Double> map=new HashMap<String,Double>();
+					Map<String,Float> map=new HashMap<String,Float>();
 					for(Rating r:rating){
-						map.put(Integer.toString(r.product()), r.rating());
+						map.put(Integer.toString(r.product()), Double.valueOf(r.rating()).floatValue());
 					}
 					redisTemplate.opsForHash().putAll(COLLAB_FILTER_USER_CACHE+uid,map);
 					redisTemplate.expire(COLLAB_FILTER_USER_CACHE+uid, 3, TimeUnit.DAYS);
@@ -111,6 +114,28 @@ public class ResultHadler implements Serializable {
 		}while(i<len);
 		
 	}
+	
+	public void userCf(MatrixFactorizationModel model,JavaRDD<Tuple2<Object, double[]>>  userList) {
+//		String outputDir="data";
+//		Rating[] res=model.recommendProducts(17720, 2);
+//		String p="";
+//		for(Rating r:res){
+//			p+=r.product()+",";
+//		}
+//		System.out.println("17720:"+p);
+//		model.userFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile(
+//		        outputDir + "/userFeatures");
+//		    model.productFeatures().toJavaRDD().map(new FeaturesToString()).saveAsTextFile(
+//		        outputDir + "/productFeatures");
+//		    System.out.println("Final user/product features written to " + outputDir);
+//		JavaRDD<String> users=jssc.textFile(GlobalVar.USER_PATH);
+//		List<String> userList=users.collect();
+		userList.foreachPartition(new ForEacheUserFunction(model,100));
+		
+		
+	}
+	
+	
 	
 	/**
 	 * 计算两个向量的余弦相似度

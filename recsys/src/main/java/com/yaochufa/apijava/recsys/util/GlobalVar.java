@@ -39,5 +39,12 @@ public class GlobalVar {
 			.getString("sparkConf.master");
 	public static final int ITEMCF_REC_PRODUCT_SIZE =  properties
 			.getInt("itemcf.rec_product_size");
+	
+//	= 192.168.237.1
+//			
+	public static final String REDIS_HOST =  properties
+			.getString("sparkConf.master");
+	public static final int REDIS_PORT =  properties
+			.getInt("redis.port");
 
 }
