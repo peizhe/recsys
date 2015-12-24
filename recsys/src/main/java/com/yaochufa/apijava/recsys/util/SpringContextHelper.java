@@ -8,7 +8,7 @@ public class SpringContextHelper{
 	
 	
 	public static void init(){
-		context=new ClassPathXmlApplicationContext("classpath:spring/applicationContext-business.xml");
+		context=new ClassPathXmlApplicationContext("classpath:spring/applicationContext*.xml");
 	}
 	
 

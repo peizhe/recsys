@@ -27,62 +27,18 @@
     
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis.xml" />
+		<property name="configLocation" value="classpath:mybatis-ycfsolr_inno.xml" />
 	</bean>
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
      
-     <!-- mapper 代理 st -->
-     <bean id="productSimimlarityMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface"
-			value="com.yaochufa.apijava.recsys.mapper.ProductSimimlarityMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	<bean id="sqlSessionFactory_fdm" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource_ycf_dwh_fdm" />
+		<property name="configLocation" value="classpath:mybatis-ycf_dwh_fdm.xml" />
 	</bean>
-	 <bean id="userProductRecommendMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface"
-			value="com.yaochufa.apijava.recsys.mapper.UserProductRecommendMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	<bean id="sqlSessionTemplate_fdm" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory_fdm" />
 	</bean>
-	<bean id="searchMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface"
-			value="com.yaochufa.apijava.recsys.mapper.SearchMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
-     <!-- mapper 代理 ed -->
-     
-     <!-- schedual  st -->
-     <!-- 线程执行器配置，用于任务注册 -->
-	
-	<bean id="taskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-		<property name="corePoolSize" value="10" />
-		<property name="maxPoolSize" value="100" />
-		<property name="queueCapacity" value="500" />
-	</bean>
-	<!-- 调度业务 -->
-	<bean id="collabFilterTaskJobDetail"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="collabFilterTask" />
-		<property name="targetMethod" value="run" />
-	</bean>
-	<!-- 调度触发器 -->
-	<bean id="collabFilterTaskCronTrigger"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="collabFilterTaskJobDetail" />
-		<property name="cronExpression" value="0 56 14 * * ?" /><!-- 每天上午5点40 
-			0 40 5 * * ? -->
-	</bean>
-	<!-- 设置调度 -->
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-
-			<list>
-			 <ref bean="collabFilterTaskCronTrigger" /> 
-			</list>
-		</property>
-	</bean>
-     <!-- schedual  ed -->
-	
 	
 </beans>

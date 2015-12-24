@@ -43,7 +43,7 @@ public class GlobalVar {
 //	= 192.168.237.1
 //			
 	public static final String REDIS_HOST =  properties
-			.getString("sparkConf.master");
+			.getString("redis.host");
 	public static final int REDIS_PORT =  properties
 			.getInt("redis.port");
 

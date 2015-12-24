@@ -6,6 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import com.yaochufa.apijava.recsys.service.impl.UserOPenDeviceServiceimpl;
+import com.yaochufa.apijava.recsys.util.SpringContextHelper;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -51,17 +54,20 @@ public class AppTest extends TestCase {
 		Configuration conf=HBaseConfiguration.create();
 		Scan scan = new Scan();
 		scan.setCacheBlocks(conf.getBoolean("a", false));*/
-		Person p=new Person();
-		p.setName("xuht");
-		p.setItem(new Item("iphone"));
-		ByteArrayOutputStream ops=new ByteArrayOutputStream();
-		ObjectOutputStream oop=new ObjectOutputStream(ops);
-		oop.writeObject(p);
-		ByteArrayInputStream ios=new ByteArrayInputStream(ops.toByteArray());
-		ObjectInputStream objis=new ObjectInputStream(ios);
-		
-		Person p2= (Person) objis.readObject();
-		System.out.println(p2.toString());
+//		Person p=new Person();
+//		p.setName("xuht");
+//		p.setItem(new Item("iphone"));
+//		ByteArrayOutputStream ops=new ByteArrayOutputStream();
+//		ObjectOutputStream oop=new ObjectOutputStream(ops);
+//		oop.writeObject(p);
+//		ByteArrayInputStream ios=new ByteArrayInputStream(ops.toByteArray());
+//		ObjectInputStream objis=new ObjectInputStream(ios);
+//		
+//		Person p2= (Person) objis.readObject();
+//		System.out.println(p2.toString());
+		SpringContextHelper.init();
+		UserOPenDeviceServiceimpl se=SpringContextHelper.getBean("userOPenDeviceServiceimpl", UserOPenDeviceServiceimpl.class);
+		se.loadActiveUserToRedisByDeltaMode();
 	}
 }
 

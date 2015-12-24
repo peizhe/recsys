@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yaochufa.apijava.recsys.mapper.FActUserFirstLastOpenRecordDeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.yaochufa.apijava.recsys.model.FActUserFirstLastOpenRecordDevice" >
+    <result column="MachineCode" property="machinecode" jdbcType="VARCHAR" />
+    <result column="FirstOpenId" property="firstopenid" jdbcType="BIGINT" />
+    <result column="FirstDeviceUid" property="firstdeviceuid" jdbcType="VARCHAR" />
+    <result column="FirstMachineBrand" property="firstmachinebrand" jdbcType="VARCHAR" />
+    <result column="FirstMachineType" property="firstmachinetype" jdbcType="TINYINT" />
+    <result column="FirstUserId" property="firstuserid" jdbcType="INTEGER" />
+    <result column="FirstAreaId" property="firstareaid" jdbcType="INTEGER" />
+    <result column="FirstAreaName" property="firstareaname" jdbcType="VARCHAR" />
+    <result column="FirstProvinceId" property="firstprovinceid" jdbcType="INTEGER" />
+    <result column="FirstProvinceName" property="firstprovincename" jdbcType="VARCHAR" />
+    <result column="FirstCityId" property="firstcityid" jdbcType="INTEGER" />
+    <result column="FirstCityName" property="firstcityname" jdbcType="VARCHAR" />
+    <result column="FirstIP" property="firstip" jdbcType="VARCHAR" />
+    <result column="FirstSystemType" property="firstsystemtype" jdbcType="VARCHAR" />
+    <result column="FirstSystemVersion" property="firstsystemversion" jdbcType="VARCHAR" />
+    <result column="FirstAppFrom" property="firstappfrom" jdbcType="VARCHAR" />
+    <result column="FirstAppVersion" property="firstappversion" jdbcType="VARCHAR" />
+    <result column="FirstOpenDate" property="firstopendate" jdbcType="DATE" />
+    <result column="FirstOpenTime" property="firstopentime" jdbcType="TIMESTAMP" />
+    <result column="FirstVisitProvinceId" property="firstvisitprovinceid" jdbcType="INTEGER" />
+    <result column="FirstVisitProvinceName" property="firstvisitprovincename" jdbcType="VARCHAR" />
+    <result column="FirstVisitCityId" property="firstvisitcityid" jdbcType="INTEGER" />
+    <result column="FirstVisitCityName" property="firstvisitcityname" jdbcType="VARCHAR" />
+    <result column="LastOpenId" property="lastopenid" jdbcType="BIGINT" />
+    <result column="LastDeviceUid" property="lastdeviceuid" jdbcType="VARCHAR" />
+    <result column="LastMachineBrand" property="lastmachinebrand" jdbcType="VARCHAR" />
+    <result column="LastMachineType" property="lastmachinetype" jdbcType="TINYINT" />
+    <result column="LastUserId" property="lastuserid" jdbcType="INTEGER" />
+    <result column="LastAreaId" property="lastareaid" jdbcType="INTEGER" />
+    <result column="LastAreaName" property="lastareaname" jdbcType="VARCHAR" />
+    <result column="LastProvinceId" property="lastprovinceid" jdbcType="INTEGER" />
+    <result column="LastProvinceName" property="lastprovincename" jdbcType="VARCHAR" />
+    <result column="LastCityId" property="lastcityid" jdbcType="INTEGER" />
+    <result column="LastCityName" property="lastcityname" jdbcType="VARCHAR" />
+    <result column="LastIP" property="lastip" jdbcType="VARCHAR" />
+    <result column="LastSystemType" property="lastsystemtype" jdbcType="VARCHAR" />
+    <result column="LastSystemVersion" property="lastsystemversion" jdbcType="VARCHAR" />
+    <result column="LastAppFrom" property="lastappfrom" jdbcType="VARCHAR" />
+    <result column="LastAppVersion" property="lastappversion" jdbcType="VARCHAR" />
+    <result column="LastOpenDate" property="lastopendate" jdbcType="DATE" />
+    <result column="LastOpenTime" property="lastopentime" jdbcType="TIMESTAMP" />
+    <result column="LastVisitProvinceId" property="lastvisitprovinceid" jdbcType="INTEGER" />
+    <result column="LastVisitProvinceName" property="lastvisitprovincename" jdbcType="VARCHAR" />
+    <result column="LastVisitCityId" property="lastvisitcityid" jdbcType="INTEGER" />
+    <result column="LastVisitCityName" property="lastvisitcityname" jdbcType="VARCHAR" />
+    <result column="DataFrom" property="datafrom" jdbcType="TINYINT" />
+    <result column="ETL_JOB" property="etlJob" jdbcType="VARCHAR" />
+    <result column="ETL_SRC_TABLE" property="etlSrcTable" jdbcType="VARCHAR" />
+    <result column="ETL_FIRST_DATE" property="etlFirstDate" jdbcType="TIMESTAMP" />
+    <result column="ETL_LD_DATE" property="etlLdDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yaochufa.apijava.recsys.model.FActUserFirstLastOpenRecordDevice" >
+    insert into f_act_user_first_last_open_record_device (MachineCode, FirstOpenId, FirstDeviceUid, 
+      FirstMachineBrand, FirstMachineType, FirstUserId, 
+      FirstAreaId, FirstAreaName, FirstProvinceId, 
+      FirstProvinceName, FirstCityId, FirstCityName, 
+      FirstIP, FirstSystemType, FirstSystemVersion, 
+      FirstAppFrom, FirstAppVersion, FirstOpenDate, 
+      FirstOpenTime, FirstVisitProvinceId, 
+      FirstVisitProvinceName, FirstVisitCityId, 
+      FirstVisitCityName, LastOpenId, LastDeviceUid, 
+      LastMachineBrand, LastMachineType, LastUserId, 
+      LastAreaId, LastAreaName, LastProvinceId, 
+      LastProvinceName, LastCityId, LastCityName, 
+      LastIP, LastSystemType, LastSystemVersion, 
+      LastAppFrom, LastAppVersion, LastOpenDate, 
+      LastOpenTime, LastVisitProvinceId, LastVisitProvinceName, 
+      LastVisitCityId, LastVisitCityName, DataFrom, 
+      ETL_JOB, ETL_SRC_TABLE, ETL_FIRST_DATE, 
+      ETL_LD_DATE)
+    values (#{machinecode,jdbcType=VARCHAR}, #{firstopenid,jdbcType=BIGINT}, #{firstdeviceuid,jdbcType=VARCHAR}, 
+      #{firstmachinebrand,jdbcType=VARCHAR}, #{firstmachinetype,jdbcType=TINYINT}, #{firstuserid,jdbcType=INTEGER}, 
+      #{firstareaid,jdbcType=INTEGER}, #{firstareaname,jdbcType=VARCHAR}, #{firstprovinceid,jdbcType=INTEGER}, 
+      #{firstprovincename,jdbcType=VARCHAR}, #{firstcityid,jdbcType=INTEGER}, #{firstcityname,jdbcType=VARCHAR}, 
+      #{firstip,jdbcType=VARCHAR}, #{firstsystemtype,jdbcType=VARCHAR}, #{firstsystemversion,jdbcType=VARCHAR}, 
+      #{firstappfrom,jdbcType=VARCHAR}, #{firstappversion,jdbcType=VARCHAR}, #{firstopendate,jdbcType=DATE}, 
+      #{firstopentime,jdbcType=TIMESTAMP}, #{firstvisitprovinceid,jdbcType=INTEGER}, 
+      #{firstvisitprovincename,jdbcType=VARCHAR}, #{firstvisitcityid,jdbcType=INTEGER}, 
+      #{firstvisitcityname,jdbcType=VARCHAR}, #{lastopenid,jdbcType=BIGINT}, #{lastdeviceuid,jdbcType=VARCHAR}, 
+      #{lastmachinebrand,jdbcType=VARCHAR}, #{lastmachinetype,jdbcType=TINYINT}, #{lastuserid,jdbcType=INTEGER}, 
+      #{lastareaid,jdbcType=INTEGER}, #{lastareaname,jdbcType=VARCHAR}, #{lastprovinceid,jdbcType=INTEGER}, 
+      #{lastprovincename,jdbcType=VARCHAR}, #{lastcityid,jdbcType=INTEGER}, #{lastcityname,jdbcType=VARCHAR}, 
+      #{lastip,jdbcType=VARCHAR}, #{lastsystemtype,jdbcType=VARCHAR}, #{lastsystemversion,jdbcType=VARCHAR}, 
+      #{lastappfrom,jdbcType=VARCHAR}, #{lastappversion,jdbcType=VARCHAR}, #{lastopendate,jdbcType=DATE}, 
+      #{lastopentime,jdbcType=TIMESTAMP}, #{lastvisitprovinceid,jdbcType=INTEGER}, #{lastvisitprovincename,jdbcType=VARCHAR}, 
+      #{lastvisitcityid,jdbcType=INTEGER}, #{lastvisitcityname,jdbcType=VARCHAR}, #{datafrom,jdbcType=TINYINT}, 
+      #{etlJob,jdbcType=VARCHAR}, #{etlSrcTable,jdbcType=VARCHAR}, #{etlFirstDate,jdbcType=TIMESTAMP}, 
+      #{etlLdDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yaochufa.apijava.recsys.model.FActUserFirstLastOpenRecordDevice" >
+    insert into f_act_user_first_last_open_record_device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="machinecode != null" >
+        MachineCode,
+      </if>
+      <if test="firstopenid != null" >
+        FirstOpenId,
+      </if>
+      <if test="firstdeviceuid != null" >
+        FirstDeviceUid,
+      </if>
+      <if test="firstmachinebrand != null" >
+        FirstMachineBrand,
+      </if>
+      <if test="firstmachinetype != null" >
+        FirstMachineType,
+      </if>
+      <if test="firstuserid != null" >
+        FirstUserId,
+      </if>
+      <if test="firstareaid != null" >
+        FirstAreaId,
+      </if>
+      <if test="firstareaname != null" >
+        FirstAreaName,
+      </if>
+      <if test="firstprovinceid != null" >
+        FirstProvinceId,
+      </if>
+      <if test="firstprovincename != null" >
+        FirstProvinceName,
+      </if>
+      <if test="firstcityid != null" >
+        FirstCityId,
+      </if>
+      <if test="firstcityname != null" >
+        FirstCityName,
+      </if>
+      <if test="firstip != null" >
+        FirstIP,
+      </if>
+      <if test="firstsystemtype != null" >
+        FirstSystemType,
+      </if>
+      <if test="firstsystemversion != null" >
+        FirstSystemVersion,
+      </if>
+      <if test="firstappfrom != null" >
+        FirstAppFrom,
+      </if>
+      <if test="firstappversion != null" >
+        FirstAppVersion,
+      </if>
+      <if test="firstopendate != null" >
+        FirstOpenDate,
+      </if>
+      <if test="firstopentime != null" >
+        FirstOpenTime,
+      </if>
+      <if test="firstvisitprovinceid != null" >
+        FirstVisitProvinceId,
+      </if>
+      <if test="firstvisitprovincename != null" >
+        FirstVisitProvinceName,
+      </if>
+      <if test="firstvisitcityid != null" >
+        FirstVisitCityId,
+      </if>
+      <if test="firstvisitcityname != null" >
+        FirstVisitCityName,
+      </if>
+      <if test="lastopenid != null" >
+        LastOpenId,
+      </if>
+      <if test="lastdeviceuid != null" >
+        LastDeviceUid,
+      </if>
+      <if test="lastmachinebrand != null" >
+        LastMachineBrand,
+      </if>
+      <if test="lastmachinetype != null" >
+        LastMachineType,
+      </if>
+      <if test="lastuserid != null" >
+        LastUserId,
+      </if>
+      <if test="lastareaid != null" >
+        LastAreaId,
+      </if>
+      <if test="lastareaname != null" >
+        LastAreaName,
+      </if>
+      <if test="lastprovinceid != null" >
+        LastProvinceId,
+      </if>
+      <if test="lastprovincename != null" >
+        LastProvinceName,
+      </if>
+      <if test="lastcityid != null" >
+        LastCityId,
+      </if>
+      <if test="lastcityname != null" >
+        LastCityName,
+      </if>
+      <if test="lastip != null" >
+        LastIP,
+      </if>
+      <if test="lastsystemtype != null" >
+        LastSystemType,
+      </if>
+      <if test="lastsystemversion != null" >
+        LastSystemVersion,
+      </if>
+      <if test="lastappfrom != null" >
+        LastAppFrom,
+      </if>
+      <if test="lastappversion != null" >
+        LastAppVersion,
+      </if>
+      <if test="lastopendate != null" >
+        LastOpenDate,
+      </if>
+      <if test="lastopentime != null" >
+        LastOpenTime,
+      </if>
+      <if test="lastvisitprovinceid != null" >
+        LastVisitProvinceId,
+      </if>
+      <if test="lastvisitprovincename != null" >
+        LastVisitProvinceName,
+      </if>
+      <if test="lastvisitcityid != null" >
+        LastVisitCityId,
+      </if>
+      <if test="lastvisitcityname != null" >
+        LastVisitCityName,
+      </if>
+      <if test="datafrom != null" >
+        DataFrom,
+      </if>
+      <if test="etlJob != null" >
+        ETL_JOB,
+      </if>
+      <if test="etlSrcTable != null" >
+        ETL_SRC_TABLE,
+      </if>
+      <if test="etlFirstDate != null" >
+        ETL_FIRST_DATE,
+      </if>
+      <if test="etlLdDate != null" >
+        ETL_LD_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="machinecode != null" >
+        #{machinecode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstopenid != null" >
+        #{firstopenid,jdbcType=BIGINT},
+      </if>
+      <if test="firstdeviceuid != null" >
+        #{firstdeviceuid,jdbcType=VARCHAR},
+      </if>
+      <if test="firstmachinebrand != null" >
+        #{firstmachinebrand,jdbcType=VARCHAR},
+      </if>
+      <if test="firstmachinetype != null" >
+        #{firstmachinetype,jdbcType=TINYINT},
+      </if>
+      <if test="firstuserid != null" >
+        #{firstuserid,jdbcType=INTEGER},
+      </if>
+      <if test="firstareaid != null" >
+        #{firstareaid,jdbcType=INTEGER},
+      </if>
+      <if test="firstareaname != null" >
+        #{firstareaname,jdbcType=VARCHAR},
+      </if>
+      <if test="firstprovinceid != null" >
+        #{firstprovinceid,jdbcType=INTEGER},
+      </if>
+      <if test="firstprovincename != null" >
+        #{firstprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="firstcityid != null" >
+        #{firstcityid,jdbcType=INTEGER},
+      </if>
+      <if test="firstcityname != null" >
+        #{firstcityname,jdbcType=VARCHAR},
+      </if>
+      <if test="firstip != null" >
+        #{firstip,jdbcType=VARCHAR},
+      </if>
+      <if test="firstsystemtype != null" >
+        #{firstsystemtype,jdbcType=VARCHAR},
+      </if>
+      <if test="firstsystemversion != null" >
+        #{firstsystemversion,jdbcType=VARCHAR},
+      </if>
+      <if test="firstappfrom != null" >
+        #{firstappfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="firstappversion != null" >
+        #{firstappversion,jdbcType=VARCHAR},
+      </if>
+      <if test="firstopendate != null" >
+        #{firstopendate,jdbcType=DATE},
+      </if>
+      <if test="firstopentime != null" >
+        #{firstopentime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstvisitprovinceid != null" >
+        #{firstvisitprovinceid,jdbcType=INTEGER},
+      </if>
+      <if test="firstvisitprovincename != null" >
+        #{firstvisitprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="firstvisitcityid != null" >
+        #{firstvisitcityid,jdbcType=INTEGER},
+      </if>
+      <if test="firstvisitcityname != null" >
+        #{firstvisitcityname,jdbcType=VARCHAR},
+      </if>
+      <if test="lastopenid != null" >
+        #{lastopenid,jdbcType=BIGINT},
+      </if>
+      <if test="lastdeviceuid != null" >
+        #{lastdeviceuid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmachinebrand != null" >
+        #{lastmachinebrand,jdbcType=VARCHAR},
+      </if>
+      <if test="lastmachinetype != null" >
+        #{lastmachinetype,jdbcType=TINYINT},
+      </if>
+      <if test="lastuserid != null" >
+        #{lastuserid,jdbcType=INTEGER},
+      </if>
+      <if test="lastareaid != null" >
+        #{lastareaid,jdbcType=INTEGER},
+      </if>
+      <if test="lastareaname != null" >
+        #{lastareaname,jdbcType=VARCHAR},
+      </if>
+      <if test="lastprovinceid != null" >
+        #{lastprovinceid,jdbcType=INTEGER},
+      </if>
+      <if test="lastprovincename != null" >
+        #{lastprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="lastcityid != null" >
+        #{lastcityid,jdbcType=INTEGER},
+      </if>
+      <if test="lastcityname != null" >
+        #{lastcityname,jdbcType=VARCHAR},
+      </if>
+      <if test="lastip != null" >
+        #{lastip,jdbcType=VARCHAR},
+      </if>
+      <if test="lastsystemtype != null" >
+        #{lastsystemtype,jdbcType=VARCHAR},
+      </if>
+      <if test="lastsystemversion != null" >
+        #{lastsystemversion,jdbcType=VARCHAR},
+      </if>
+      <if test="lastappfrom != null" >
+        #{lastappfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="lastappversion != null" >
+        #{lastappversion,jdbcType=VARCHAR},
+      </if>
+      <if test="lastopendate != null" >
+        #{lastopendate,jdbcType=DATE},
+      </if>
+      <if test="lastopentime != null" >
+        #{lastopentime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastvisitprovinceid != null" >
+        #{lastvisitprovinceid,jdbcType=INTEGER},
+      </if>
+      <if test="lastvisitprovincename != null" >
+        #{lastvisitprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="lastvisitcityid != null" >
+        #{lastvisitcityid,jdbcType=INTEGER},
+      </if>
+      <if test="lastvisitcityname != null" >
+        #{lastvisitcityname,jdbcType=VARCHAR},
+      </if>
+      <if test="datafrom != null" >
+        #{datafrom,jdbcType=TINYINT},
+      </if>
+      <if test="etlJob != null" >
+        #{etlJob,jdbcType=VARCHAR},
+      </if>
+      <if test="etlSrcTable != null" >
+        #{etlSrcTable,jdbcType=VARCHAR},
+      </if>
+      <if test="etlFirstDate != null" >
+        #{etlFirstDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etlLdDate != null" >
+        #{etlLdDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+    <select id="selectActiveDevice" parameterType="com.yaochufa.apijava.recsys.model.FActUserFirstLastOpenRecordDevice" resultType="java.util.HashMap">
+  select machinecode as machineCode,lastopentime as lastOpenTime from f_act_user_first_last_open_record_device where <if test="lastopentime != null" >lastopentime>#{lastopentime,jdbcType=TIMESTAMP} and</if>  lastopentime>=DATE_SUB(CURDATE(), INTERVAL 365 DAY) order by lastopentime desc
+  </select>
+  
+</mapper>

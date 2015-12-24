@@ -1,15 +1,15 @@
 package com.yaochufa.apijava.recsys.collabfilter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
 import org.jblas.DoubleMatrix;
@@ -28,10 +27,12 @@ import org.springframework.stereotype.Component;
 import scala.Tuple2;
 
 import com.yaochufa.apijava.lang.common.Pair;
+import com.yaochufa.apijava.recsys.function.collabfilter.FilterInActiveUser;
 import com.yaochufa.apijava.recsys.function.collabfilter.ForEacheUserFunction;
+import com.yaochufa.apijava.recsys.function.collabfilter.RecommendForEachUserTask;
+import com.yaochufa.apijava.recsys.function.collabfilter.UserFetchFunction;
 import com.yaochufa.apijava.recsys.mapper.SearchMapper;
 import com.yaochufa.apijava.recsys.model.ProductSimimlarity;
-import com.yaochufa.apijava.recsys.model.UserProductRecommend;
 
 @Component
 public class ResultHadler implements Serializable {
@@ -115,7 +116,7 @@ public class ResultHadler implements Serializable {
 		
 	}
 	
-	public void userCf(MatrixFactorizationModel model,JavaRDD<Tuple2<Object, double[]>>  userList) {
+	public void userCf(final MatrixFactorizationModel model,JavaRDD<Tuple2<Object, double[]>>  userList) {
 //		String outputDir="data";
 //		Rating[] res=model.recommendProducts(17720, 2);
 //		String p="";
@@ -130,7 +131,18 @@ public class ResultHadler implements Serializable {
 //		    System.out.println("Final user/product features written to " + outputDir);
 //		JavaRDD<String> users=jssc.textFile(GlobalVar.USER_PATH);
 //		List<String> userList=users.collect();
-		userList.foreachPartition(new ForEacheUserFunction(model,100));
+		List<Integer> users=userList.map(new UserFetchFunction()).filter(new FilterInActiveUser()).collect();
+		ExecutorService ex=Executors.newFixedThreadPool(4);
+		for(Integer userId :users){
+			ex.execute(new RecommendForEachUserTask(userId, model));
+		}
+		try {
+			ex.awaitTermination(1, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ex.shutdown();
 		
 		
 	}

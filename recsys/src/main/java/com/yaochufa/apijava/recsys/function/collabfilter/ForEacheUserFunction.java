@@ -8,11 +8,13 @@ import java.util.concurrent.TimeUnit;
 import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import redis.clients.jedis.Jedis;
 import scala.Tuple2;
 
 import com.yaochufa.apijava.recsys.util.RedisClient;
+import com.yaochufa.apijava.recsys.util.SpringContextHelper;
 
 public class ForEacheUserFunction implements VoidFunction<Iterator<Tuple2<Object,double[]>>>{
 
@@ -38,7 +40,6 @@ public class ForEacheUserFunction implements VoidFunction<Iterator<Tuple2<Object
 					for(Rating r:rating){
 						map.put(Integer.toString(r.product()), Double.valueOf(r.rating()).floatValue()+"");
 					}
-					
 					jedis.hmset(COLLAB_FILTER_USER_CACHE+uid, map);
 					jedis.pexpire(COLLAB_FILTER_USER_CACHE+uid, 3*24*3600*1000L);
 				}	

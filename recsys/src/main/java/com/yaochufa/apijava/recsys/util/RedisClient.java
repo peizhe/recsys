@@ -83,4 +83,8 @@ public class RedisClient implements Serializable {
             jedisPool.returnResource(jedis);
         }
     }
+    
+    public static void main(String[] args) {
+		getJedis();
+	}
 }
